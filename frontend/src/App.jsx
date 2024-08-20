@@ -1,12 +1,14 @@
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LoginPage } from "./Routes.js";
 
 function App() {
   return (
-    <>
-      <h1 className="min-h-5 text-center bg-blue-500text-3xl font-bold underline">
-        React
-      </h1>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="login" element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
