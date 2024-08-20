@@ -16,7 +16,7 @@ const styles = {
   input: "w-full border p-1 rounded-[5px]",
   activeStatus:
     "w-[10px] h-[10px] rounded-full absolute top-0 right-1 bg-[#40d132]",
-  noramlFlex: "flex items-center",
+  normalFlex: "flex items-center",
 };
 
 export default styles;
