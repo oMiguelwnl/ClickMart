@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
@@ -86,7 +86,7 @@ const Login = () => {
               </div>
               <div className="text-sm">
                 <a
-                  href=".esqueci-senha"
+                  href="/forgot-password"
                   className="font-medium text-blue-600 hover:text-blue-500"
                 >
                   Esqueceu a senha?
@@ -98,12 +98,12 @@ const Login = () => {
                 type="submit"
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
-                Submit
+                Enviar
               </button>
             </div>
             <div className={`${styles.normalFlex} w-full`}>
               <h4>Não tem uma conta?</h4>
-              <Link to="/cadastro" className="text-blue-600 pl-2">
+              <Link to="/sign-up" className="text-blue-600 pl-2">
                 Cadastre-se
               </Link>
             </div>
