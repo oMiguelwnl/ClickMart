@@ -2,25 +2,25 @@ const ErrorHandler = require("../utils/ErrorHandler");
 
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
-  err.message = err.message || "Internal server Error";
+  err.message = err.message || "Erro interno do servidor";
 
   if (err.name === "CastError") {
-    const message = `Resources not found with this id.. Invalid ${err.path}`;
+    const message = `Recurso não encontrado com este ID.. ${err.path} inválido`;
     err = new ErrorHandler(message, 400);
   }
 
   if (err.code === 11000) {
-    const message = `Duplicate key ${Object.keys(err.keyValue)} Entered`;
+    const message = `Chave duplicada ${Object.keys(err.keyValue)} inserida`;
     err = new ErrorHandler(message, 400);
   }
 
   if (err.name === "JsonWebTokenError") {
-    const message = `Your url is invalid please try again letter`;
+    const message = `Sua URL é inválida, por favor, tente novamente mais tarde`;
     err = new ErrorHandler(message, 400);
   }
 
   if (err.name === "TokenExpiredError") {
-    const message = `Your Url is expired please try again letter!`;
+    const message = `Sua URL expirou, por favor, tente novamente mais tarde!`;
     err = new ErrorHandler(message, 400);
   }
 
