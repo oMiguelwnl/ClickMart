@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
+import { Link } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
-import { server } from "../../server";
 import axios from "axios";
+import { server } from "../../server";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,6 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
     const reader = new FileReader();
@@ -29,23 +29,17 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
-    const newForm = new FormData();
-
-    newForm.append("file", avatar);
-    newForm.append("name", name);
-    newForm.append("email", email);
-    newForm.append("password", password);
-
     axios
-      .post(`${server}/user/create-user`, newForm, config)
+      .post(`${server}/user/create-user`, { name, email, password, avatar })
       .then((res) => {
-        if (res.data.success === true) {
-          navigate("/");
-        }
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        toast.error(error.response.data.message);
       });
   };
 
@@ -78,6 +72,7 @@ const SignUp = () => {
                 />
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -97,6 +92,7 @@ const SignUp = () => {
                 />
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="password"
@@ -129,6 +125,7 @@ const SignUp = () => {
                 )}
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="avatar"
@@ -162,6 +159,7 @@ const SignUp = () => {
                 </label>
               </div>
             </div>
+
             <div>
               <button
                 type="submit"
