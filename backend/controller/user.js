@@ -1,59 +1,48 @@
 const express = require("express");
-const path = require("path");
 const User = require("../model/user");
 const router = express.Router();
-const { upload } = require("../multer");
+const cloudinary = require("cloudinary");
 const ErrorHandler = require("../utils/ErrorHandler");
-const fs = require("fs");
-const jwt = require("jsonwebtoken");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const jwt = require("jsonwebtoken");
+const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
 
-router.post("/create-user", upload.single("file"), async (req, res, next) => {
+router.post("/create-user", async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
-
+    const { name, email, password, avatar } = req.body;
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      const filename = req.file.filename;
-      const filePath = `uploads/${filename}`;
-
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ message: "Error deleting file" });
-        } else {
-          return res.status(400).json({
-            message: "User already exists. File deleted successfully.",
-          });
-        }
-      });
-      return next(new ErrorHandler("User already exists", 400));
+      return next(new ErrorHandler("Usuário já existe", 400));
     }
 
-    const filename = req.file.filename;
-    const fileUrl = path.join(filename);
+    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+      folder: "avatars",
+    });
 
     const user = {
       name: name,
       email: email,
       password: password,
-      avatar: fileUrl,
+      avatar: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
     };
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+    const activationUrl = `http://localhost:5174/activation/${activationToken}`;
     try {
       await sendMail({
         email: user.email,
-        subject: "Activate your account",
-        message: `Hello ${user.name}, please click on the link to activate your account: ${activationUrl}`,
+        subject: "Ative sua conta",
+        message: `Olá ${user.name}, por favor clique no link para ativar sua conta: ${activationUrl}`,
       });
       res.status(201).json({
         success: true,
-        message: `please check your email:- ${user.email} to activate your account!`,
+        message: `Por favor, verifique seu email: ${user.email} para ativar sua conta!`,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
@@ -81,7 +70,7 @@ router.post(
       );
 
       if (!newUser) {
-        return next(new ErrorHandler("Invalid token", 400));
+        return next(new ErrorHandler("Token inválido", 400));
       }
 
       const { name, email, password, avatar } = newUser;
@@ -89,7 +78,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return next(new ErrorHandler("User already exists", 400));
+        return next(new ErrorHandler("Usuário já existe", 400));
       }
 
       user = await User.create({
