@@ -1,12 +1,34 @@
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { server } from "../../server";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .post(`${server}/user/login-user`, {
+        email,
+        password,
+      })
+      .then(() => {
+        toast.success("Login realizado com sucesso!");
+        navigate("/");
+        window.location.reload(true);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -17,7 +39,7 @@ const Login = () => {
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md ">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="email"
@@ -86,7 +108,7 @@ const Login = () => {
               </div>
               <div className="text-sm">
                 <a
-                  href="/forgot-password"
+                  href=".forgot-password"
                   className="font-medium text-blue-600 hover:text-blue-500"
                 >
                   Esqueceu a senha?
