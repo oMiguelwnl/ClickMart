@@ -1,10 +1,16 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./App.css";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import Store from "./redux/store";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+  <Provider store={Store}>
     <App />
-  </StrictMode>
+  </Provider>
 );
+
+reportWebVitals();
