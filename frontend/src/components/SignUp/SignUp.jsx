@@ -55,7 +55,7 @@ const SignUp = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor=""
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
                 Nome Completo
@@ -63,7 +63,8 @@ const SignUp = () => {
               <div className="mt-1">
                 <input
                   type="text"
-                  name="text"
+                  id="name"
+                  name="name"
                   autoComplete="name"
                   required
                   value={name}
@@ -83,6 +84,7 @@ const SignUp = () => {
               <div className="mt-1">
                 <input
                   type="email"
+                  id="email"
                   name="email"
                   autoComplete="email"
                   required
@@ -103,6 +105,7 @@ const SignUp = () => {
               <div className="mt-1 relative">
                 <input
                   type={visible ? "text" : "password"}
+                  id="password"
                   name="password"
                   autoComplete="current-password"
                   required
@@ -128,9 +131,11 @@ const SignUp = () => {
 
             <div>
               <label
-                htmlFor="avatar"
+                htmlFor="file-input"
                 className="block text-sm font-medium text-gray-700"
-              ></label>
+              >
+                Avatar
+              </label>
               <div className="mt-2 flex items-center">
                 <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
                   {avatar ? (
