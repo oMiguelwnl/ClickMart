@@ -16,10 +16,16 @@ const Login = () => {
     e.preventDefault();
 
     await axios
-      .post(`${server}/user/login-user`, {
-        email,
-        password,
-      })
+      .post(
+        `${server}/user/login-user`,
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then(() => {
         toast.success("Login realizado com sucesso!");
         navigate("/");
