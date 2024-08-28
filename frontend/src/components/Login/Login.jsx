@@ -56,6 +56,7 @@ const Login = () => {
               <div className="mt-1">
                 <input
                   type="email"
+                  id="email"
                   name="email"
                   autoComplete="email"
                   required
@@ -75,6 +76,7 @@ const Login = () => {
               <div className="mt-1 relative">
                 <input
                   type={visible ? "text" : "password"}
+                  id="password"
                   name="password"
                   autoComplete="current-password"
                   required
@@ -101,8 +103,8 @@ const Login = () => {
               <div className={`${styles.normalFlex}`}>
                 <input
                   type="checkbox"
-                  name="remember-me"
                   id="remember-me"
+                  name="remember-me"
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label
