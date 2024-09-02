@@ -6,8 +6,9 @@ import { productData, categoriesData } from "../../static/data";
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
 import DropDown from "./DropDown";
+import Navbar from "./Navbar.jsx";
 
-const Header = () => {
+const Header = ({ activeHeading }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [dropDown, setDropDown] = useState(false);
@@ -121,6 +122,11 @@ const Header = () => {
                 />
               ) : null}
             </div>
+          </div>
+
+          {/* NavItems */}
+          <div className={`${styles.normalFlex}`}>
+            <Navbar active={activeHeading} />
           </div>
         </div>
       </div>
