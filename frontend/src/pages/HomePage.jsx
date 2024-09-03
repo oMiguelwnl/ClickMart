@@ -1,6 +1,7 @@
 import Header from "../components/Layout/Header";
 import Hero from "../components/Route/Hero";
 import Categories from "../components/Route/Categories/Categories";
+import BestDeals from "../components/Route/BestDeals/BestDeals";
 
 const HomePage = () => {
   return (
@@ -8,6 +9,7 @@ const HomePage = () => {
       <Header activeHeading={1} />
       <Hero />
       <Categories />
+      <BestDeals />
     </div>
   );
 };
