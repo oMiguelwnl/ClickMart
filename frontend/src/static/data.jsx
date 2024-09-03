@@ -6,7 +6,7 @@ export const navItems = [
   },
   {
     title: "Mais Vendidos",
-    url: "/best-selling",
+    url: "/mais-vendidos",
   },
   {
     title: "Produtos",

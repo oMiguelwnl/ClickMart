@@ -1,6 +1,11 @@
 import styles from "../../styles/styles";
 import { Link } from "react-router-dom";
-import { AiOutlineSearch } from "react-icons/ai";
+import {
+  AiOutlineHeart,
+  AiOutlineSearch,
+  AiOutlineShoppingCart,
+} from "react-icons/ai";
+import { CgProfile } from "react-icons/cg";
 import { useState } from "react";
 import { productData, categoriesData } from "../../static/data";
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
@@ -127,6 +132,37 @@ const Header = ({ activeHeading }) => {
           {/* NavItems */}
           <div className={`${styles.normalFlex}`}>
             <Navbar active={activeHeading} />
+          </div>
+
+          <div className="flex">
+            <div className={`${styles.normalFlex}`}>
+              <div className="relative cursor-pointer mr-[15px]">
+                <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
+                <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                  0
+                </span>
+              </div>
+            </div>
+
+            <div className={`${styles.normalFlex}`}>
+              <div className="relative cursor-pointer mr-[15px]">
+                <AiOutlineShoppingCart
+                  size={30}
+                  color="rgb(255 255 255 / 83%)"
+                />
+                <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                  1
+                </span>
+              </div>
+            </div>
+
+            <div className={`${styles.normalFlex}`}>
+              <div className="relative cursor-pointer mr-[15px]">
+                <Link to="/login">
+                  <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
