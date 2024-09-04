@@ -9,18 +9,20 @@ import {
   AiOutlineShoppingCart,
   AiOutlineStar,
 } from "react-icons/ai";
+import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard";
 
 const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const nomeProduto = data.name.replace(/\s+/g, "-");
+  const d = data.name;
+  const product_name = d.replace(/\s+/g, "-");
 
   return (
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
-        <Link to={`/product/${nomeProduto}`}>
+        <Link to={`/product/${product_name}`}>
           <img
             src={data.image_Url[0].url}
             alt="produto"
@@ -32,7 +34,7 @@ const ProductCard = ({ data }) => {
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
 
-        <Link to={`/product/${nomeProduto}`}>
+        <Link to={`/product/${product_name}`}>
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
@@ -76,7 +78,7 @@ const ProductCard = ({ data }) => {
           </span>
         </div>
 
-        {/* SideOptions*/}
+        {/* side options */}
         <div>
           {click ? (
             <AiFillHeart
@@ -109,6 +111,7 @@ const ProductCard = ({ data }) => {
             color="#444"
             title="Adicionar ao carrinho"
           />
+          {open ? <ProductDetailsCard setOpen={setOpen} data={data} /> : null}
         </div>
       </div>
     </>
