@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
 import BestSellingPage from "./pages/BestSellingPage";
 import EventsPage from "./pages/EventsPage";
+import FaqPage from "./pages/FaqPage";
 
 export {
   LoginPage,
@@ -14,4 +15,5 @@ export {
   ProductsPage,
   BestSellingPage,
   EventsPage,
+  FaqPage,
 };
