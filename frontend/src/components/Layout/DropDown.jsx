@@ -4,7 +4,7 @@ import styles from "../../styles/styles";
 const DropDown = ({ categoriesData, setDropDown }) => {
   const navigate = useNavigate();
   const submitHandle = (i) => {
-    navigate(`/products?category=${i.title}`);
+    navigate(`/produtos?category=${i.title}`);
     setDropDown(false);
     window.location.reload();
   };
