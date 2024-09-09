@@ -14,6 +14,7 @@ import DropDown from "./DropDown";
 import Navbar from "./Navbar.jsx";
 import { useSelector } from "react-redux";
 import { backend_url } from "../../server.js";
+import Cart from "../cart/Cart.jsx";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -21,6 +22,7 @@ const Header = ({ activeHeading }) => {
   const [searchData, setSearchData] = useState(null);
   const [dropDown, setDropDown] = useState(false);
   const [active, setActive] = useState(false);
+  const [openCard, setOpenCard] = useState(false);
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
@@ -148,7 +150,10 @@ const Header = ({ activeHeading }) => {
             </div>
 
             <div className={`${styles.normalFlex}`}>
-              <div className="relative cursor-pointer mr-[15px]">
+              <div
+                className="relative cursor-pointer mr-[15px]"
+                onClick={() => setOpenCard(true)}
+              >
                 <AiOutlineShoppingCart
                   size={30}
                   color="rgb(255 255 255 / 83%)"
@@ -175,6 +180,9 @@ const Header = ({ activeHeading }) => {
                 )}
               </div>
             </div>
+
+            {/* Card popup */}
+            {openCard ? <Cart setOpenCard={setOpenCard} /> : null}
           </div>
         </div>
       </div>
