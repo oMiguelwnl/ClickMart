@@ -10,7 +10,8 @@ import {
   BestSellingPage,
   EventsPage,
   FaqPage,
-} from "./Routes.js";
+  ProductDetailsPage,
+} from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store.js";
@@ -37,6 +38,7 @@ function App() {
               element={<ActivationPage />}
             />
             <Route path="/produtos" element={<ProductsPage />} />
+            <Route path="/produto/:name" element={<ProductDetailsPage />} />
             <Route path="/mais-vendidos" element={<BestSellingPage />} />
             <Route path="/eventos" element={<EventsPage />} />
             <Route path="/faq" element={<FaqPage />} />
