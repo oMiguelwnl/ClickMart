@@ -172,7 +172,7 @@ const Header = ({ activeHeading }) => {
             <div className={`${styles.normalFlex}`}>
               <div className="relative cursor-pointer mr-[15px]">
                 {isAuthenticated ? (
-                  <Link to="/profile">
+                  <Link to="/perfil">
                     <img
                       src={`${backend_url}${user.avatar}`}
                       className="w-[35px] h-[35px] rounded-full"
