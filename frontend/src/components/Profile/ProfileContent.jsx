@@ -1,8 +1,11 @@
 import { useSelector } from "react-redux";
 import { backend_url } from "../../server";
-import { AiOutlineCamera } from "react-icons/ai";
+import { AiOutlineArrowRight, AiOutlineCamera } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const ProfileContent = ({ active }) => {
   const { user } = useSelector((state) => state.user);
@@ -124,6 +127,96 @@ const ProfileContent = ({ active }) => {
           </div>
         </>
       )}
+
+      {/* Order */}
+      {active === 2 && (
+        <div>
+          <AllOrders />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const AllOrders = () => {
+  const orders = [
+    {
+      _id: "62e1f1e4d0f7d1c6c0a5f3e8",
+      orderItems: [
+        {
+          name: "Iphone 14 pro max",
+        },
+      ],
+      totalPrice: 120,
+      orderStatus: "Processando",
+    },
+  ];
+
+  const columns = [
+    { field: "id", headerName: "ID do Pedido", minWidth: 150, flex: 0.7 },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 130,
+      flex: 0.7,
+      cellClassName: (params) => {
+        return params.row.status === "Entregue" ? "greenColor" : "redColor";
+      },
+    },
+    {
+      field: "itemsQty",
+      headerName: "Quantidade de Itens",
+      type: "number",
+      minWidth: 130,
+      flex: 0.7,
+    },
+    {
+      field: "total",
+      headerName: "Total",
+      type: "number",
+      minWidth: 130,
+      flex: 0.8,
+    },
+    {
+      field: " ",
+      flex: 1,
+      minWidth: 150,
+      headerName: "",
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Link to={`/user/order/${params.id}`}>
+            <Button>
+              <AiOutlineArrowRight size={20} />
+            </Button>
+          </Link>
+        );
+      },
+    },
+  ];
+
+  const row = [];
+
+  orders &&
+    orders.forEach((item) => {
+      row.push({
+        id: item._id,
+        itemsQty: item.orderItems.length,
+        total: "R$ " + item.totalPrice,
+        status: item.orderStatus,
+      });
+    });
+
+  return (
+    <div className="pl-8 pt-1">
+      <DataGrid
+        rows={row}
+        columns={columns}
+        pageSize={10}
+        disableSelectionOnClick
+        autoHeight
+      />
     </div>
   );
 };
