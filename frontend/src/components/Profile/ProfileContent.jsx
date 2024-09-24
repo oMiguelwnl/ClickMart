@@ -1,6 +1,10 @@
 import { useSelector } from "react-redux";
 import { backend_url } from "../../server";
-import { AiOutlineArrowRight, AiOutlineCamera } from "react-icons/ai";
+import {
+  AiOutlineArrowRight,
+  AiOutlineCamera,
+  AiOutlineDelete,
+} from "react-icons/ai";
 import styles from "../../styles/styles";
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
@@ -154,6 +158,13 @@ const ProfileContent = ({ active }) => {
       {active === 6 && (
         <div>
           <ChangePassword />
+        </div>
+      )}
+
+      {/* User Address */}
+      {active === 7 && (
+        <div>
+          <Address />
         </div>
       )}
     </div>
@@ -468,6 +479,37 @@ const ChangePassword = () => {
             />
           </div>
         </form>
+      </div>
+    </div>
+  );
+};
+
+const Address = () => {
+  return (
+    <div className="w-full px-5">
+      <div className="flex items-center w-full justify-between">
+        <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
+          My Addresses
+        </h1>
+        <div className={`${styles.button} !rounded-md`}>
+          <span className="text-[#fff]">Add New Address</span>
+        </div>
+      </div>
+      <br />
+
+      <div className="w-full bg-white h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10">
+        <div className="flex items-center">
+          <h5>Default Address</h5>
+        </div>
+        <div className="pl-8 flex items-center">
+          <h6>494 Castro Street, San Francisco, CA 94103</h6>
+        </div>
+        <div className="pl-8 flex items-center">
+          <h6>(415) 555-0100</h6>
+        </div>
+        <div className="min-w-[10%] flex items-center justify-between pl-8">
+          <AiOutlineDelete size={25} className="cursor-pointer" />
+        </div>
       </div>
     </div>
   );
