@@ -1,11 +1,13 @@
-import { HiOutlineShoppingBag } from "react-icons/hi";
-import { RxPerson } from "react-icons/rx";
-import { AiOutlineMessage } from "react-icons/ai";
-import { MdOutlineTrackChanges } from "react-icons/md";
+import { AiOutlineLogin, AiOutlineMessage } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { HiOutlineReceiptRefund, HiOutlineShoppingBag } from "react-icons/hi";
+import { MdOutlineTrackChanges } from "react-icons/md";
 import { TbAddressBook } from "react-icons/tb";
-import { useSelector } from "react-redux";
+import { RxPerson } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { server } from "../../server";
+import { toast } from "react-toastify";
 
 const menuItems = [
   {
@@ -22,7 +24,7 @@ const menuItems = [
   },
   {
     id: 3,
-    icon: <HiOutlineShoppingBag size={20} />,
+    icon: <HiOutlineReceiptRefund size={20} />,
     text: "Reembolsos",
     activeColor: "red",
   },
@@ -50,10 +52,29 @@ const menuItems = [
     text: "Endereço",
     activeColor: "red",
   },
+  {
+    id: 8,
+    icon: <AiOutlineLogin size={20} />,
+    text: "Desconectar",
+    activeColor: "red",
+  },
 ];
 
 const ProfileSidebar = ({ active, setActive }) => {
   const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    axios
+      .get(`${server}/user/logout`, { withCredentials: true })
+      .then((res) => {
+        toast.success(res.data.message);
+        window.location.reload(true);
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
+  };
 
   return (
     <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">
@@ -61,7 +82,13 @@ const ProfileSidebar = ({ active, setActive }) => {
         <div
           key={menuItem.id}
           className="flex items-center cursor-pointer w-full mb-8"
-          onClick={() => setActive(menuItem.id)}
+          onClick={() => {
+            if (menuItem.id === 8) {
+              logoutHandler();
+            } else {
+              setActive(menuItem.id);
+            }
+          }}
         >
           <span
             className={`${
