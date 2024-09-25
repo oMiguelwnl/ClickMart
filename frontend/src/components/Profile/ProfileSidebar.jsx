@@ -8,57 +8,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
-
-const menuItems = [
-  {
-    id: 1,
-    icon: <RxPerson size={20} />,
-    text: "Perfil",
-    activeColor: "red",
-  },
-  {
-    id: 2,
-    icon: <HiOutlineShoppingBag size={20} />,
-    text: "Pedidos",
-    activeColor: "red",
-  },
-  {
-    id: 3,
-    icon: <HiOutlineReceiptRefund size={20} />,
-    text: "Reembolsos",
-    activeColor: "red",
-  },
-  {
-    id: 4,
-    icon: <AiOutlineMessage size={20} />,
-    text: "Caixa de Entrada",
-    activeColor: "red",
-  },
-  {
-    id: 5,
-    icon: <MdOutlineTrackChanges size={20} />,
-    text: "Rastrear Pedido",
-    activeColor: "red",
-  },
-  {
-    id: 6,
-    icon: <RiLockPasswordLine size={20} />,
-    text: "Alterar Senha",
-    activeColor: "red",
-  },
-  {
-    id: 7,
-    icon: <TbAddressBook size={20} />,
-    text: "Endereço",
-    activeColor: "red",
-  },
-  {
-    id: 8,
-    icon: <AiOutlineLogin size={20} />,
-    text: "Desconectar",
-    activeColor: "red",
-  },
-];
+import React from "react";
 
 const ProfileSidebar = ({ active, setActive }) => {
   const navigate = useNavigate();
@@ -76,36 +26,85 @@ const ProfileSidebar = ({ active, setActive }) => {
       });
   };
 
+  const menuItems = [
+    {
+      id: 1,
+      icon: <RxPerson size={20} />,
+      text: "Perfil",
+      onClick: () => setActive(1),
+    },
+    {
+      id: 2,
+      icon: <HiOutlineShoppingBag size={20} />,
+      text: "Pedidos",
+      onClick: () => setActive(2),
+    },
+    {
+      id: 3,
+      icon: <HiOutlineReceiptRefund size={20} />,
+      text: "Reembolsos",
+      onClick: () => setActive(3),
+    },
+    {
+      id: 4,
+      icon: <AiOutlineMessage size={20} />,
+      text: "Caixa de Entrada",
+      onClick: () => setActive(4) || navigate("/inbox"),
+    },
+    {
+      id: 5,
+      icon: <MdOutlineTrackChanges size={20} />,
+      text: "Rastrear Pedido",
+      onClick: () => setActive(5),
+    },
+    {
+      id: 6,
+      icon: <RiLockPasswordLine size={20} />,
+      text: "Alterar Senha",
+      onClick: () => setActive(6),
+    },
+    {
+      id: 7,
+      icon: <TbAddressBook size={20} />,
+      text: "Endereço",
+      onClick: () => setActive(7),
+    },
+  ];
+
   return (
     <div className="w-full bg-white shadow-sm rounded-[10px] p-4 pt-8">
-      {menuItems.map((menuItem) => (
+      {menuItems.map((item) => (
         <div
-          key={menuItem.id}
+          key={item.id}
           className="flex items-center cursor-pointer w-full mb-8"
-          onClick={() => {
-            if (menuItem.id === 8) {
-              logoutHandler();
-            } else {
-              setActive(menuItem.id);
-            }
-          }}
+          onClick={item.onClick}
         >
-          <span
-            className={`${
-              active === menuItem.id ? `text-[${menuItem.activeColor}]` : ""
-            }`}
-          >
-            {menuItem.icon}
-          </span>
+          {React.cloneElement(item.icon, {
+            color: active === item.id ? "red" : "",
+          })}
           <span
             className={`pl-3 ${
-              active === menuItem.id ? `text-[${menuItem.activeColor}]` : ""
+              active === item.id ? "text-[red]" : ""
             } 800px:block hidden`}
           >
-            {menuItem.text}
+            {item.text}
           </span>
         </div>
       ))}
+
+      <div
+        className="single_item flex items-center cursor-pointer w-full mb-8"
+        onClick={logoutHandler}
+      >
+        <AiOutlineLogin size={20} color={active === 9 ? "red" : ""} />
+        <span
+          className={`pl-3 ${
+            active === 9 ? "text-[red]" : ""
+          } 800px:block hidden`}
+        >
+          Log out
+        </span>
+      </div>
     </div>
   );
 };
