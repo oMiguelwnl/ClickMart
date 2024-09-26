@@ -46,23 +46,23 @@ const ProfileContent = ({ active }) => {
 
           <div className="w-full px-5">
             <form onSubmit={handleSubmit} aria-required="true">
-              <div className="w-full flex pb-3">
-                <div className="w-[50%]">
+              <div className="w-full 800px:flex block pb-3">
+                <div className="w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">Nome Completo</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
 
-                <div className="w-[50%]">
+                <div className="w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">Endereço de E-mail</label>
                   <input
                     type="email"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input} !w-[95%] mb-1 800px:mb-0`}
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -70,7 +70,7 @@ const ProfileContent = ({ active }) => {
                 </div>
               </div>
 
-              <div className="w-full flex pb-3">
+              <div className="w-full 800px:flex block pb-3">
                 <div className=" w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">Número de Telefone</label>
                   <input
@@ -83,11 +83,11 @@ const ProfileContent = ({ active }) => {
                   />
                 </div>
 
-                <div className="w-[50%]">
+                <div className="w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">CEP</label>
                   <input
                     type="number"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input} !w-[95%] mb-1 800px:mb-0`}
                     required
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value)}
@@ -96,8 +96,8 @@ const ProfileContent = ({ active }) => {
                 </div>
               </div>
 
-              <div className="w-full flex pb-3">
-                <div className=" w-[100%] 800px:w-[50%]">
+              <div className="w-full 800px:flex block pb-3">
+                <div className="w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">Endereço 1</label>
                   <input
                     type="text"
@@ -109,11 +109,11 @@ const ProfileContent = ({ active }) => {
                   />
                 </div>
 
-                <div className="w-[50%]">
+                <div className="w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">Endereço 2</label>
                   <input
                     type="text"
-                    className={`${styles.input} !w-[95%]`}
+                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
                     value={address2}
                     onChange={(e) => setAddress2(e.target.value)}
