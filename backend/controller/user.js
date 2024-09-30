@@ -34,7 +34,7 @@ router.post("/create-user", async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `http://localhost:5174/activation/${activationToken}`;
+    const activationUrl = `${process.env.ACTIVATION_URL}/activation/${activationToken}`;
     try {
       await sendMail({
         email: user.email,
