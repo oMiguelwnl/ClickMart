@@ -101,7 +101,37 @@ router.post(
 
       sendShopToken(seller, 201, res);
     } catch (error) {
-      console.error(error);
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.post(
+  "/login-shop",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return next(
+          new ErrorHandler("Por favor, insira seu email e senha", 400)
+        );
+      }
+
+      const user = await Shop.findOne({ email }).select("+password");
+
+      if (!user) {
+        return next(new ErrorHandler("Usuário não encontrado", 400));
+      }
+
+      const isPasswordCorrect = await user.comparePassword(password);
+
+      if (!isPasswordCorrect) {
+        return next(new ErrorHandler("Email ou senha inválidos", 400));
+      }
+
+      sendShopToken(user, 201, res);
+    } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
   })
