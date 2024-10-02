@@ -17,10 +17,6 @@ const shopSchema = new mongoose.Schema({
     minLength: [6, "A senha deve ter mais de 6 caracteres"],
     select: false,
   },
-  phoneNumber: {
-    type: Number,
-    required: true,
-  },
   description: {
     type: String,
   },
@@ -28,9 +24,14 @@ const shopSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  phoneNumber: {
+    type: Number,
+    required: true,
+  },
   role: {
     type: String,
-    required: "Vendedor",
+    required: true,
+    default: "Vendedor",
   },
   avatar: {
     public_id: {
@@ -53,7 +54,6 @@ const shopSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-
   transactions: [
     {
       amount: {
@@ -73,13 +73,18 @@ const shopSchema = new mongoose.Schema({
       },
     },
   ],
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  resetPasswordToken: String,
+  resetPasswordTime: Date,
 });
 
 shopSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
-
   this.password = await bcrypt.hash(this.password, 10);
 });
 
