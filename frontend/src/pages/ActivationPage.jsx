@@ -18,7 +18,7 @@ const ActivationPage = () => {
           .then((res) => {
             console.log(res);
           })
-          .catch((error) => {
+          .catch((err) => {
             setError(true);
           });
       };
@@ -37,9 +37,9 @@ const ActivationPage = () => {
       }}
     >
       {error ? (
-        <p>Your token is expired!</p>
+        <p>Seu token está expirado!</p>
       ) : (
-        <p>Your account has been created successfully!</p>
+        <p>Sua conta foi criada com sucesso!</p>
       )}
     </div>
   );
