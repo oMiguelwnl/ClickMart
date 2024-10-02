@@ -9,6 +9,7 @@ import FaqPage from "../pages/FaqPage";
 import ProductDetailsPage from "../pages/ProductDetailsPage";
 import ProfilePage from "../pages/ProfilePage";
 import ShopCreate from "../pages/ShopCreatePage";
+import SellerActivationPage from "../pages/SellerActivationPage";
 
 export {
   LoginPage,
@@ -22,4 +23,5 @@ export {
   ProductDetailsPage,
   ProfilePage,
   ShopCreate,
+  SellerActivationPage
 };
