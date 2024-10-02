@@ -8,20 +8,42 @@ import { toast } from "react-toastify";
 import { RxAvatar } from "react-icons/rx";
 
 const ShopCreate = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phoneNumber: "",
-    address: "",
-    zipCode: "",
-    avatar: null,
-    password: "",
-  });
-
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState();
+  const [avatar, setAvatar] = useState();
+  const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    axios
+      .post(`${server}/shop/create-shop`, {
+        name,
+        email,
+        password,
+        avatar,
+        zipCode,
+        address,
+        phoneNumber,
+        role: "Vendedor",
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setAvatar();
+        setZipCode();
+        setAddress("");
+        setPhoneNumber();
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   };
 
   const handleFileInputChange = (e) => {
@@ -29,35 +51,11 @@ const ShopCreate = () => {
 
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setFormData({ ...formData, avatar: reader.result });
+        setAvatar(reader.result);
       }
     };
 
     reader.readAsDataURL(e.target.files[0]);
-  };
-
-  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await axios.post(`${server}/shop/create-shop`, formData);
-      toast.success(res.data.message);
-      setFormData({
-        name: "",
-        email: "",
-        phoneNumber: "",
-        address: "",
-        zipCode: "",
-        avatar: null,
-        password: "",
-      });
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
   };
 
   return (
@@ -72,19 +70,18 @@ const ShopCreate = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor="name"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Nome da loja
               </label>
               <div className="mt-1">
                 <input
-                  type="text"
+                  type="name"
                   name="name"
-                  id="name"
                   required
-                  value={formData.name}
-                  onChange={handleChange}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -92,7 +89,7 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="phoneNumber"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Número de telefone
@@ -100,11 +97,10 @@ const ShopCreate = () => {
               <div className="mt-1">
                 <input
                   type="number"
-                  name="phoneNumber"
-                  id="phoneNumber"
+                  name="phone-number"
                   required
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -121,10 +117,10 @@ const ShopCreate = () => {
                 <input
                   type="email"
                   name="email"
-                  id="email"
+                  autoComplete="email"
                   required
-                  value={formData.email}
-                  onChange={handleChange}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -132,19 +128,18 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="address"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Endereço
               </label>
               <div className="mt-1">
                 <input
-                  type="text"
+                  type="address"
                   name="address"
-                  id="address"
                   required
-                  value={formData.address}
-                  onChange={handleChange}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -152,7 +147,7 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="zipCode"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Código Postal
@@ -160,11 +155,10 @@ const ShopCreate = () => {
               <div className="mt-1">
                 <input
                   type="number"
-                  name="zipCode"
-                  id="zipCode"
+                  name="zipcode"
                   required
-                  value={formData.zipCode}
-                  onChange={handleChange}
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -181,23 +175,23 @@ const ShopCreate = () => {
                 <input
                   type={visible ? "text" : "password"}
                   name="password"
-                  id="password"
+                  autoComplete="current-password"
                   required
-                  value={formData.password}
-                  onChange={handleChange}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {visible ? (
                   <AiOutlineEye
                     className="absolute right-2 top-2 cursor-pointer"
                     size={25}
-                    onClick={toggleVisibility}
+                    onClick={() => setVisible(false)}
                   />
                 ) : (
                   <AiOutlineEyeInvisible
                     className="absolute right-2 top-2 cursor-pointer"
                     size={25}
-                    onClick={toggleVisibility}
+                    onClick={() => setVisible(true)}
                   />
                 )}
               </div>
@@ -210,9 +204,9 @@ const ShopCreate = () => {
               ></label>
               <div className="mt-2 flex items-center">
                 <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {formData.avatar ? (
+                  {avatar ? (
                     <img
-                      src={formData.avatar}
+                      src={avatar}
                       alt="avatar"
                       className="h-full w-full object-cover rounded-full"
                     />
