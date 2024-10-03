@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import styles from "../../styles/styles";
 
 const ShopLogin = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -26,7 +25,6 @@ const ShopLogin = () => {
       )
       .then((res) => {
         toast.success("Login realizado com sucesso!");
-        navigate("/dashboard");
         window.location.reload(true);
       })
       .catch((err) => {
