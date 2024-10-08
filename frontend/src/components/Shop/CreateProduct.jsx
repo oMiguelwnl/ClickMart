@@ -1,10 +1,16 @@
-import { useState } from "react";
-import { categoriesData } from "../../static/data";
+import { useEffect, useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../redux/actions/product";
+import { categoriesData } from "../../static/data";
+import { toast } from "react-toastify";
 
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
+  const { success, error } = useSelector((state) => state.products);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
@@ -15,21 +21,69 @@ const CreateProduct = () => {
   const [discountPrice, setDiscountPrice] = useState();
   const [stock, setStock] = useState();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+    if (success) {
+      toast.success("Produto criado com sucesso!");
+      navigate("/dashboard");
+      window.location.reload();
+    }
+  }, [dispatch, error, success]);
 
   const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    setImages([]);
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImages((old) => [...old, reader.result]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    let files = Array.from(e.target.files);
-    setImages((prevImages) => [...prevImages, ...files]);
+    const newForm = new FormData();
+
+    images.forEach((image) => {
+      newForm.set("images", image);
+    });
+    newForm.append("name", name);
+    newForm.append("description", description);
+    newForm.append("category", category);
+    newForm.append("tags", tags);
+    newForm.append("originalPrice", originalPrice);
+    newForm.append("discountPrice", discountPrice);
+    newForm.append("stock", stock);
+    newForm.append("shopId", seller._id);
+
+    dispatch(
+      createProduct({
+        name,
+        description,
+        category,
+        tags,
+        originalPrice,
+        discountPrice,
+        stock,
+        shopId: seller._id,
+        images,
+      })
+    );
   };
 
   return (
-    <div className="w-[90%] 800px:w-[50%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
-      <h5 className="text-[30px] font-poppins text-center">Criar Produto</h5>
-
+    <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
+      <h5 className="text-[30px] font-Poppins text-center">Criar Produto</h5>
       <form onSubmit={handleSubmit}>
         <br />
         <div>
@@ -45,8 +99,8 @@ const CreateProduct = () => {
             placeholder="Digite o nome do seu produto..."
           />
         </div>
-        <br />
 
+        <br />
         <div>
           <label className="pb-2">
             Descrição <span className="text-red-500">*</span>
@@ -71,11 +125,10 @@ const CreateProduct = () => {
           </label>
           <select
             className="w-full mt-2 border h-[35px] rounded-[5px]"
+            value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="Selecione uma categoria">
-              Selecione uma categoria
-            </option>
+            <option value="Choose a category">Selecione uma categoria</option>
             {categoriesData &&
               categoriesData.map((i) => (
                 <option value={i.title} key={i.title}>
@@ -168,15 +221,15 @@ const CreateProduct = () => {
                 />
               ))}
           </div>
-        </div>
 
-        <br />
-        <div>
-          <input
-            type="submit"
-            value="Criar Produto"
-            className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          />
+          <br />
+          <div>
+            <input
+              type="submit"
+              value="Create"
+              className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
         </div>
       </form>
     </div>
