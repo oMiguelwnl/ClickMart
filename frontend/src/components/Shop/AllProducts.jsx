@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllProductsShop } from "../../redux/actions/product";
+import { deleteProduct, getAllProductsShop } from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -16,6 +16,10 @@ const AllProducts = () => {
   useEffect(() => {
     dispatch(getAllProductsShop(seller._id));
   }, [dispatch, seller._id]);
+
+  const handleDelete = (id) => {
+    dispatch(deleteProduct(id));
+  };
 
   const columns = [
     { field: "id", headerName: "ID do Produto", minWidth: 150, flex: 0.7 },
@@ -56,7 +60,7 @@ const AllProducts = () => {
         const productName = params.row.name.replace(/\s+/g, "-");
 
         return (
-          <Link to={`/product/${productName}`}>
+          <Link to={`/produto/${productName}`}>
             <Button>
               <AiOutlineEye size={20} />
             </Button>
@@ -71,9 +75,9 @@ const AllProducts = () => {
       headerName: "Excluir",
       type: "number",
       sortable: false,
-      renderCell: () => {
+      renderCell: (params) => {
         return (
-          <Button>
+          <Button onClick={() => handleDelete(params.id)}>
             <AiOutlineDelete size={20} />
           </Button>
         );
