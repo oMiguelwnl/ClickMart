@@ -78,7 +78,7 @@ router.delete(
       const product = await Product.findByIdAndDelete(product.id);
 
       if (!product) {
-        return next(new ErrorHandler("Product is not found with this id", 404));
+        return next(new ErrorHandler("Produto não encontrado", 404));
       }
 
       for (let i = 0; 1 < product.images.length; i++) {
@@ -91,7 +91,7 @@ router.delete(
 
       res.status(201).json({
         success: true,
-        message: "Product Deleted successfully!",
+        message: "Produto deletado com sucesso!",
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
