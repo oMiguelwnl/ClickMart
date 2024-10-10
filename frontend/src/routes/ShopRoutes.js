@@ -3,6 +3,7 @@ import ShopHomePage from "../pages/Shop/ShopHomePage";
 import ShopCreateProductPage from "../pages/Shop/ShopCreateProductPage";
 import ShopAllProductsPage from "../pages/Shop/ShopAllProductsPage";
 import ShopCreateEventsPage from "../pages/Shop/ShopCreateEventsPage";
+import ShopAllEventsPage from "../pages/Shop/ShopAllEventsPage";
 
 export {
   ShopDashboardPage,
@@ -10,4 +11,5 @@ export {
   ShopCreateProductPage,
   ShopAllProductsPage,
   ShopCreateEventsPage,
+  ShopAllEventsPage,
 };
