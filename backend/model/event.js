@@ -13,11 +13,11 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, "Por favor, insira a categoria do evento!"],
   },
-  startDate: {
+  start_Date: {
     type: Date,
     required: true,
   },
-  FinalDate: {
+  finish_Date: {
     type: Date,
     required: true,
   },
@@ -37,7 +37,7 @@ const eventSchema = new mongoose.Schema({
   },
   stock: {
     type: Number,
-    required: [true, "Por favor, insira o estoque do evento!"],
+    required: [true, "Please enter your event product stock!"],
   },
   images: [
     {
@@ -51,29 +51,6 @@ const eventSchema = new mongoose.Schema({
       },
     },
   ],
-  reviews: [
-    {
-      user: {
-        type: Object,
-      },
-      rating: {
-        type: Number,
-      },
-      comment: {
-        type: String,
-      },
-      productId: {
-        type: String,
-      },
-      createdAt: {
-        type: Date,
-        default: Date.now(),
-      },
-    },
-  ],
-  ratings: {
-    type: Number,
-  },
   shopId: {
     type: String,
     required: true,
