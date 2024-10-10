@@ -89,7 +89,7 @@ router.delete(
       const event = await Event.findById(req.params.id);
 
       if (!product) {
-        return next(new ErrorHandler("Product is not found with this id", 404));
+        return next(new ErrorHandler("Produto não encontrado", 400));
       }
 
       for (let i = 0; 1 < product.images.length; i++) {
@@ -102,7 +102,7 @@ router.delete(
 
       res.status(201).json({
         success: true,
-        message: "Event Deleted successfully!",
+        message: "Evento excluído com sucesso!",
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
