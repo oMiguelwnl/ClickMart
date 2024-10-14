@@ -45,4 +45,27 @@ router.get(
   })
 );
 
+router.delete(
+  "/delete-coupon/:id",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const couponCode = await Coupon.findById(req.params.id);
+
+      if (!couponCode) {
+        return next(new ErrorHandler("Cupom não existe!", 404));
+      }
+
+      await Coupon.findByIdAndDelete(req.params.id);
+
+      res.status(200).json({
+        success: true,
+        couponCode,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
 module.exports = router;
