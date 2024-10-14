@@ -15,39 +15,39 @@ router.post(
 
       if (!shop) {
         return next(new ErrorHandler("Loja não encontrada", 400));
+      }
+
+      let images = [];
+
+      if (typeof req.body.images === "string") {
+        images.push(req.body.images);
       } else {
-        let images = [];
+        images = req.body.images;
+      }
 
-        if (typeof req.body.images === "string") {
-          images.push(req.body.images);
-        } else {
-          images = req.body.images;
-        }
+      const imagesLinks = [];
 
-        const imagesLinks = [];
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+          folder: "products",
+        });
 
-        for (let i = 0; i < images.length; i++) {
-          const result = await cloudinary.v2.uploader.upload(images[i], {
-            folder: "products",
-          });
-
-          imagesLinks.push({
-            public_id: result.public_id,
-            url: result.secure_url,
-          });
-        }
-
-        const productData = req.body;
-        productData.images = imagesLinks;
-        productData.shop = shop;
-
-        const event = await Event.create(productData);
-
-        res.status(201).json({
-          success: true,
-          event,
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
         });
       }
+
+      const productData = req.body;
+      productData.images = imagesLinks;
+      productData.shop = shop;
+
+      const event = await Event.create(productData);
+
+      res.status(201).json({
+        success: true,
+        event,
+      });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }
@@ -88,19 +88,17 @@ router.delete(
     try {
       const event = await Event.findById(req.params.id);
 
-      if (!product) {
-        return next(new ErrorHandler("Produto não encontrado", 400));
+      if (!event) {
+        return next(new ErrorHandler("Evento não encontrado", 404));
       }
 
-      for (let i = 0; 1 < product.images.length; i++) {
-        const result = await cloudinary.v2.uploader.destroy(
-          event.images[i].public_id
-        );
+      for (let i = 0; i < event.images.length; i++) {
+        await cloudinary.v2.uploader.destroy(event.images[i].public_id);
       }
 
-      await event.remove();
+      await Event.findByIdAndDelete(req.params.id);
 
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: "Evento excluído com sucesso!",
       });
