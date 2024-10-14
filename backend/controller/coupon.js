@@ -27,3 +27,22 @@ router.post(
     }
   })
 );
+
+router.get(
+  "/get-coupon/:id",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const couponCode = await Coupon.find({ shopId: req.seller.id });
+
+      res.status(201).json({
+        success: true,
+        couponCode,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+module.exports = router;
