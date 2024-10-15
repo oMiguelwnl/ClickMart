@@ -154,7 +154,7 @@ const DashboardSideBar = ({ active }) => {
               active === 9 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Códigos de Desconto
+            Cupons de Desconto
           </h5>
         </Link>
       </div>
