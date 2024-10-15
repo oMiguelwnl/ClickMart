@@ -1,6 +1,6 @@
 import DashboardHeader from "../../components/Shop/Layout/DashboardHeader";
 import DashboardSideBar from "../../components/Shop/Layout/DashboardSideBar";
-import CreateCoupon from "../../components/Shop/CreateCoupon";
+import AllCoupons from "../../components/Shop/AllCoupons";
 
 const ShopAllCouponsPage = () => {
   return (
@@ -11,7 +11,7 @@ const ShopAllCouponsPage = () => {
           <DashboardSideBar active={9} />
         </div>
         <div className="w-full justify-center flex">
-          <CreateCoupon />
+          <AllCoupons />
         </div>
       </div>
     </div>
