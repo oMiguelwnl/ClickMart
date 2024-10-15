@@ -8,9 +8,12 @@ const router = express.Router();
 
 router.post(
   "/create-coupon-code",
+  isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const isCouponExist = await Coupon.findOne({ name: req.body.name });
+      const isCouponExist = await Coupon.find({
+        name: req.body.name,
+      });
 
       if (isCouponExist.length !== 0) {
         return next(new ErrorHandler("Código de cupom já existe!", 400));
@@ -33,11 +36,11 @@ router.get(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const couponCode = await Coupon.find({ shopId: req.seller.id });
+      const coupons = await Coupon.find({ shopId: req.params.id });
 
-      res.status(201).json({
+      res.status(200).json({
         success: true,
-        couponCode,
+        coupons,
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
@@ -50,17 +53,14 @@ router.delete(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const couponCode = await Coupon.findById(req.params.id);
+      const couponCode = await Coupon.findByIdAndDelete(req.params.id);
 
       if (!couponCode) {
         return next(new ErrorHandler("Cupom não existe!", 404));
       }
-
-      await Coupon.findByIdAndDelete(req.params.id);
-
-      res.status(200).json({
+      res.status(201).json({
         success: true,
-        couponCode,
+        message: "Coupon code deleted successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
