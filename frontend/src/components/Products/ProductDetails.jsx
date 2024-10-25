@@ -1,14 +1,24 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "../../styles/styles";
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProductsShop } from "../../redux/actions/product";
 
 const ProductDetails = ({ data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
+
+  const { products } = useSelector((state) => state.products);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllProductsShop(data && data?.shop._id));
+  }, [dispatch]);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -147,7 +157,7 @@ const ProductDetails = ({ data }) => {
               </div>
             </div>
           </div>
-          <ProductDetailsInfo data={data} />
+          <ProductDetailsInfo data={data} products={products} />
           <br />
           <br />
         </div>
@@ -156,7 +166,7 @@ const ProductDetails = ({ data }) => {
   );
 };
 
-const ProductDetailsInfo = ({ data }) => {
+const ProductDetailsInfo = ({ data, products }) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
@@ -207,37 +217,7 @@ const ProductDetailsInfo = ({ data }) => {
       {active === 1 ? (
         <>
           <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Os detalhes do produto são uma parte crucial de qualquer site de
-            eCommerce ou mercado online. Esses detalhes ajudam os clientes
-            potenciais a tomar uma decisão informada sobre o produto que estão
-            interessados em comprar. Uma descrição bem escrita do produto também
-            pode ser uma ferramenta de marketing poderosa que pode ajudar a
-            aumentar as vendas. Os detalhes do produto geralmente incluem
-            informações sobre as características, especificações, dimensões,
-            peso, materiais e outras informações relevantes que podem ajudar os
-            clientes a entender melhor o produto. A seção de detalhes do produto
-            também deve incluir imagens e vídeos de alta qualidade do produto,
-            bem como avaliações e classificações dos clientes.
-          </p>
-
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Esses detalhes ajudam os clientes potenciais a tomar uma decisão
-            informada sobre o produto que estão interessados em comprar. Uma
-            descrição bem escrita do produto também pode ser uma ferramenta de
-            marketing poderosa que pode ajudar a aumentar as vendas. Os detalhes
-            do produto geralmente incluem informações sobre as características,
-            especificações, dimensões, peso, materiais e outras informações
-            relevantes que podem ajudar os clientes a entender melhor o produto.
-          </p>
-
-          <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            Esses detalhes ajudam os clientes potenciais a tomar uma decisão
-            informada sobre o produto que estão interessados em comprar. Uma
-            descrição bem escrita do produto também pode ser uma ferramenta de
-            marketing poderosa que pode ajudar a aumentar as vendas. Os detalhes
-            do produto geralmente incluem informações sobre as características,
-            especificações, dimensões, peso, materiais e outras informações
-            relevantes que podem ajudar os clientes a entender melhor o produto.
+            {data.description}
           </p>
         </>
       ) : null}
@@ -251,40 +231,42 @@ const ProductDetailsInfo = ({ data }) => {
       {active === 3 ? (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-            <div className="flex items-center">
-              <img
-                src={data?.shop?.shop_avatar?.url || ""}
-                className="w-[50px] h-[50px] rounded-full"
-                alt="loja"
-              />
-              <div className="pl-3">
-                <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                <h5 className="pb-2 text-[15px]">
-                  ({data.shop.ratings}) Avaliações
-                </h5>
+            <Link to={`/shop/preview/${data?.shop._id}`}>
+              <div className="flex items-center">
+                <img
+                  src={`${data?.shop?.avatar?.url}`}
+                  className="w-[50px] h-[50px] rounded-full"
+                  alt="loja"
+                />
+                <div className="pl-3">
+                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                  <h5 className="pb-2 text-[15px]">(4/5) Avaliações</h5>
+                </div>
               </div>
-            </div>
+            </Link>
 
-            <p className="pt-2">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore
-              adipisci explicabo, possimus dolore dolorum totam consequuntur, ut
-              temporibus iusto, aperiam optio dolor ea aut. Consequatur corrupti
-              illo harum nam et!
-            </p>
+            <p className="pt-2">{data.shop.description}</p>
           </div>
 
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
-                Entrou em: <span className="font-[500]">11 setembro, 2024</span>
+                Entrou em:{" "}
+                <span className="font-[500]">
+                  {" "}
+                  {data.shop?.createdAt?.slice(0, 10)}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total de Produtos: <span className="font-[500]">1.324</span>
+                Total de Produtos:{" "}
+                <span className="font-[500]">
+                  {products && products.length}
+                </span>
               </h5>
               <h5 className="font-[600] pt-3">
                 Total de Avaliações: <span className="font-[500]">324</span>
               </h5>
-              <Link to="/">
+              <Link to={`/shop/preview/${data?.shop._id}`}>
                 <div
                   className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
                 >
