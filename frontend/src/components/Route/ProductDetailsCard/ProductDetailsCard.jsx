@@ -7,11 +7,22 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
-  // const [select, setSelect] = useState(false);
+
+  const {
+    name,
+    description,
+    discountPrice,
+    originalPrice,
+    images,
+    shop,
+    sold_out,
+    reviews,
+  } = data || {};
 
   const handleMessageSubmit = () => {};
 
@@ -38,45 +49,52 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
-                <img src={data.image_Url[0].url} alt="produto" />
+                <img
+                  src={images && images[0]?.url}
+                  alt="produto"
+                  className="w-full h-auto"
+                />
+
                 <div className="flex">
-                  <img
-                    src={data.shop.shop_avatar.url}
-                    alt="avatar"
-                    className="w-[50px] h-[50px] rounded-full mr-2 "
-                  />
-                  <div>
-                    <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                    <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Avaliações
-                    </h5>
-                  </div>
+                  <Link to={`/shop/preview/${data.shop._id}`} className="flex">
+                    <img
+                      src={shop?.avatar?.url}
+                      alt="avatar"
+                      className="w-[50px] h-[50px] rounded-full mr-2"
+                    />
+                    <div>
+                      <h3 className={`${styles.shop_name}`}>{shop?.name}</h3>
+                      <h5 className="pb-3 text-[15px]">
+                        {" "}
+                        ({reviews.length}) Avaliações
+                      </h5>
+                    </div>
+                  </Link>
                 </div>
+
                 <div
                   className={`${styles.button} bg-[#000] w-[160px] mt-4 rounded-[4px] h-11`}
                   onClick={handleMessageSubmit}
                 >
                   <span className="text-[#fff] flex items-center">
-                    Enviar Menssagem <AiOutlineMessage className="ml-1" />
+                    Enviar Mensagem <AiOutlineMessage className="ml-1" />
                   </span>
                 </div>
-                <h5 className="text-[16px] text-[red] mt-5 ">
-                  ({data.total_sell}) vendidos
+                <h5 className="text-[16px] text-[red] mt-5">
+                  ({sold_out}) vendidos
                 </h5>
               </div>
 
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">
-                <h1 className={`${styles.productTitle} text-[20px]`}>
-                  {data.name}
-                </h1>
-                <p className=" mt-3">{data.description}</p>
-                <div className="flex pt-3 ">
+                <h1 className={`${styles.productTitle} text-[20px]`}>{name}</h1>
+                <p className="mt-3">{description}</p>
+                <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discount_price} R$
+                    {discountPrice} R$
                   </h4>
-                  <h3 className={`${styles.price}`}>
-                    {data.price ? data.price + " R$" : null}
-                  </h3>
+                  {originalPrice && (
+                    <h3 className={`${styles.price}`}>{originalPrice} R$</h3>
+                  )}
                 </div>
 
                 <div className="flex items-center mt-12 justify-between pr-3">
