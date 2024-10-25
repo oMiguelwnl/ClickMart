@@ -15,28 +15,36 @@ const ProductCard = ({ data }) => {
   const [click, setClick] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const d = data.name;
-  const product_name = d.replace(/\s+/g, "-");
+  const {
+    name,
+    images,
+    originalPrice,
+    discountPrice,
+    shop,
+    sold_out,
+    ratings,
+  } = data;
 
   return (
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
-        <Link to={`/produto/${product_name}`}>
+
+        <Link to={`/produto/${data._id}`}>
           <img
-            src={data.image_Url[0].url}
-            alt="produto"
+            src={`${images && images[0]?.url}`}
+            alt="Produto"
             className="w-full h-[170px] object-contain"
           />
         </Link>
 
-        <Link to="/">
-          <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
+        <Link to={`/shop/preview/${data?.shop._id}`}>
+          <h5 className={`${styles.shop_name}`}>{shop.name}</h5>
         </Link>
 
-        <Link to={`/produto/${product_name}`}>
+        <Link to={`/produto/${data._id}`}>
           <h4 className="pb-3 font-[500]">
-            {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
+            {name.length > 40 ? name.slice(0, 40) + "..." : name}
           </h4>
         </Link>
 
@@ -67,18 +75,18 @@ const ProductCard = ({ data }) => {
         <div className="py-2 flex items-center justify-between">
           <div className="flex">
             <h5 className={`${styles.productDiscountPrice}`}>
-              {data.price === 0 ? data.price : data.discount_price} R$
+              {originalPrice === 0 ? originalPrice : discountPrice}$
             </h5>
             <h4 className={`${styles.price}`}>
-              {data.price ? data.price + " R$" : null}
+              {originalPrice ? originalPrice + " R$" : null}
             </h4>
           </div>
-          <span className="font-[400] text-[15px] text-[#68d284]">
-            {data.total_sell} vendidos
+          <span className="font-[400] text-[17px] text-[#68d284]">
+            {sold_out} vendidos
           </span>
         </div>
 
-        {/* side options */}
+        {/* Side Options */}
         <div>
           {click ? (
             <AiFillHeart
