@@ -25,6 +25,7 @@ import {
   ShopCreateEventsPage,
   ShopAllEventsPage,
   ShopAllCouponsPage,
+  ShopPreviewPage,
 } from "./routes/ShopRoutes";
 
 import { ToastContainer } from "react-toastify";
@@ -33,11 +34,13 @@ import Store from "./redux/store.js";
 import { loadUser, loadSeller } from "./redux/actions/user";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
+import { getAllProducts } from "./redux/actions/product.js";
 
 function App() {
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
+    Store.dispatch(getAllProducts());
   }, []);
 
   return (
@@ -56,7 +59,7 @@ function App() {
             element={<SellerActivationPage />}
           />
           <Route path="/produtos" element={<ProductsPage />} />
-          <Route path="/produto/:name" element={<ProductDetailsPage />} />
+          <Route path="/produto/:id" element={<ProductDetailsPage />} />
           <Route path="/mais-vendidos" element={<BestSellingPage />} />
           <Route path="/eventos" element={<EventsPage />} />
           <Route path="/faq" element={<FaqPage />} />
@@ -68,6 +71,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
 
           {/* Shop Routes */}
           <Route path="/shop-create" element={<ShopCreate />} />
