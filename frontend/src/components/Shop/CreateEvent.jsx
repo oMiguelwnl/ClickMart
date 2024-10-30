@@ -28,10 +28,9 @@ const CreateEvent = () => {
     const minEndDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
     setStartDate(startDate);
     setEndDate(null);
-    document.getElementById("end-date").min = minEndDate.toISOString.slice(
-      0,
-      10
-    );
+    document.getElementById("end-date").min = minEndDate
+      .toISOString()
+      .slice(0, 10);
   };
 
   const handleEndDateChange = (e) => {
@@ -100,7 +99,7 @@ const CreateEvent = () => {
   };
 
   return (
-    <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
+    <div className="w-[90%] 800px:w-[50%] bg-white shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
       <h5 className="text-[30px] font-Poppins text-center">Criar Evento</h5>
       <form onSubmit={handleSubmit}>
         <br />
@@ -229,7 +228,7 @@ const CreateEvent = () => {
           <input
             type="date"
             name="price"
-            id="start-date"
+            id="end-date"
             value={endDate ? endDate.toISOString().slice(0, 10) : ""}
             className="mt-2 appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             onChange={handleEndDateChange}
@@ -239,7 +238,7 @@ const CreateEvent = () => {
         </div>
         <br />
         <div>
-          <label className="pb-2">Escolha as Imagens</label>
+          <label className="pb-2">Faça o upload das imagens do evento</label>
           <input
             type="file"
             name=""
@@ -262,14 +261,14 @@ const CreateEvent = () => {
                 />
               ))}
           </div>
-          <br />
-          <div>
-            <input
-              type="submit"
-              value="Criar Evento"
-              className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
+        </div>
+        <br />
+        <div>
+          <input
+            type="submit"
+            value="Criar Evento"
+            className="mt-2 cursor-pointer appearance-none block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
         </div>
       </form>
     </div>
