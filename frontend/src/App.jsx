@@ -30,17 +30,19 @@ import {
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Store from "./redux/store.js";
-import { loadUser, loadSeller } from "./redux/actions/user";
-import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import Store from "./redux/store";
+import { loadSeller, loadUser } from "./redux/actions/user";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
-import { getAllProducts } from "./redux/actions/product.js";
+import { getAllProducts } from "./redux/actions/product";
+import { getAllEvents } from "./redux/actions/event";
 
 function App() {
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
+    Store.dispatch(getAllEvents());
   }, []);
 
   return (
