@@ -18,11 +18,11 @@ const cartSlice = createSlice({
       } else {
         state.cart.push(item);
       }
-      localStorage.setItem("cartItems", JSON.stringify(state.cart)); // Atualizando localStorage aqui
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
     removeFromCart: (state, action) => {
       state.cart = state.cart.filter((i) => i._id !== action.payload);
-      localStorage.setItem("cartItems", JSON.stringify(state.cart)); // Atualizando localStorage aqui
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
   },
 });
