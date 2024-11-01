@@ -8,8 +8,14 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { addToCart } from "../../../redux/reducers/cart";
 
 const ProductDetailsCard = ({ setOpen, data }) => {
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
 
@@ -22,6 +28,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     shop,
     sold_out,
     reviews,
+    stock,
   } = data || {};
 
   const handleMessageSubmit = () => {};
@@ -34,6 +41,20 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
   const incrementCount = () => {
     setCount(count + 1);
+  };
+
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((item) => item._id === id);
+
+    if (isItemExists) {
+      toast.error("Item já está no carrinho");
+    } else if (count > stock) {
+      toast.error("Não há estoque suficiente");
+    } else {
+      const cartData = { ...data, qty: count };
+      dispatch(addToCart(cartData));
+      toast.success("Item adicionado ao carrinho");
+    }
   };
 
   return (
@@ -138,7 +159,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
 
                 <div
                   className={`${styles.button} bg-[#000] w-[180px] mt-4 rounded-[4px] h-11`}
-                  onClick={handleMessageSubmit}
+                  onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-[#fff] flex items-center">
                     Adicionar ao carrinho{" "}
