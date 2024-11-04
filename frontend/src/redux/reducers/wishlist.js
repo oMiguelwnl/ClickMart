@@ -6,7 +6,6 @@ const initialState = {
     : [],
 };
 
-
 const wishlistSlice = createSlice({
   name: "wishlist",
   initialState,
@@ -14,9 +13,7 @@ const wishlistSlice = createSlice({
     addToWishlist: (state, action) => {
       const item = action.payload;
       const isItemExist = state.wishlist.find((i) => i._id === item._id);
-      if (isItemExist) {
-        state.wishlist = state.wishlist.map((i) => (i._id === isItemExist._id ? item : i));
-      } else {
+      if (!isItemExist) {
         state.wishlist.push(item);
       }
       localStorage.setItem("wishlistItems", JSON.stringify(state.wishlist));
