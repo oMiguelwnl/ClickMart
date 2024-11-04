@@ -27,10 +27,10 @@ const Cart = ({ setOpenCard }) => {
 
   return (
     <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10 flex justify-end">
-      <div className="fixed top-0 right-0 h-full w-full sm:w-[50%] md:w-[40%] lg:w-[30%] bg-white flex flex-col justify-between shadow-sm overflow-y-auto">
+      <div className="fixed top-0 right-0 h-full w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] xl:w-[25%] overflow-y-scroll bg-white flex flex-col justify-between shadow-sm">
         {cart && cart.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">
-            <div className="flex w-full justify-end pt-5 pr-5">
+            <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
               <RxCross1
                 size={25}
                 className="cursor-pointer"
@@ -50,14 +50,14 @@ const Cart = ({ setOpenCard }) => {
                 />
               </div>
 
-              <div className="flex items-center p-4 border-b">
+              <div className={`${styles.normalFlex} p-4`}>
                 <IoBagHandleOutline size={25} />
                 <h5 className="pl-2 text-[20px] font-[500]">
                   {cart && cart.length} itens
                 </h5>
               </div>
 
-              <div className="p-4 space-y-4 overflow-y-auto max-h-[60vh]">
+              <div className="w-full border-t">
                 {cart &&
                   cart.map((item, index) => (
                     <CartSingle
@@ -109,7 +109,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
 
   return (
     <div className="border-b p-4">
-      <div className="w-full flex items-center">
+      <div className="w-full flex items-center justify-between">
         <div>
           <div
             className={`bg-[#e44343] border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.normalFlex} justify-center cursor-pointer`}
