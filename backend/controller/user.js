@@ -235,5 +235,40 @@ router.put(
   })
 );
 
+router.put(
+  "/update-user-password",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.id).select("+password");
+
+      if (!user) {
+        return next(new ErrorHandler("Usuário não encontrado!", 404));
+      }
+
+      const isPasswordMatch = await user.comparePassword(req.body.oldPassword);
+      if (!isPasswordMatch) {
+        return next(new ErrorHandler("Senha atual não confere!", 400));
+      }
+
+      if (req.body.newPassword !== req.body.confirmPassword) {
+        return next(new ErrorHandler("As senhas não conferem!", 400));
+      }
+
+      user.password = req.body.newPassword;
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Senha atualizada com sucesso!",
+      });
+
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
 
 module.exports = router;

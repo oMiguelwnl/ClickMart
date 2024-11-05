@@ -42,7 +42,7 @@ export const loadSeller = () => async (dispatch) => {
 };
 
 
-export const UpdateUserInformation = (name, email, phoneNumber, password) => async (dispatch) => {
+export const updateUserInformation = (name, email, phoneNumber, password) => async (dispatch) => {
   try {
     dispatch({ type: "UpdateUserInfoRequest" });
 
@@ -70,3 +70,4 @@ export const UpdateUserInformation = (name, email, phoneNumber, password) => asy
     });
   }
 };
+
