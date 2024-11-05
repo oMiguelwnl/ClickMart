@@ -1,28 +1,68 @@
-import { useSelector } from "react-redux";
-import { backend_url } from "../../server";
+import { backend_url, server } from "../../server";
 import {
   AiOutlineArrowRight,
   AiOutlineCamera,
   AiOutlineDelete,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import styles from "../../styles/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { MdTrackChanges } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { loadUser, updateUserInformation } from "../../redux/actions/user";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const ProfileContent = ({ active }) => {
-  const { user } = useSelector((state) => state.user);
+  const { user, error, successMessage } = useSelector((state) => state.user);
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [zipCode, setZipCode] = useState();
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(user && user.phoneNumber);
+  const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(updateUserInformation(name, email, phoneNumber, password));
+  };
+
+  const handleImage = async (e) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setAvatar(reader.result);
+        axios
+          .put(
+            `${server}/user/update-avatar`,
+            { avatar: reader.result },
+            {
+              withCredentials: true,
+            }
+          )
+          .then(() => {
+            dispatch(loadUser());
+            toast.success("Avatar atualizado com sucesso!");
+          })
+          .catch((error) => {
+            toast.error(error);
+          });
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   return (
@@ -33,11 +73,20 @@ const ProfileContent = ({ active }) => {
           <div className="flex justify-center w-full">
             <div className="relative">
               <img
-                src={`${backend_url}${user?.avatar}`}
-                className="w-[150px] h-[150px] rounded-full object-cover border-3 border-[#3ad132] "
+                src={`${user?.avatar?.url}`}
+                className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
+                alt=""
               />
               <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
-                <AiOutlineCamera />
+                <input
+                  type="file"
+                  id="image"
+                  className="hidden"
+                  onChange={handleImage}
+                />
+                <label htmlFor="image">
+                  <AiOutlineCamera />
+                </label>
               </div>
             </div>
           </div>
@@ -45,7 +94,7 @@ const ProfileContent = ({ active }) => {
           <br />
 
           <div className="w-full px-5">
-            <form onSubmit={handleSubmit} aria-required="true">
+            <form onSubmit={handleSubmit} aria-required={true}>
               <div className="w-full 800px:flex block pb-3">
                 <div className="w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">Nome Completo</label>
@@ -86,44 +135,16 @@ const ProfileContent = ({ active }) => {
                 <div className="w-[100%] 800px:w-[50%]">
                   <label className="block pb-2">CEP</label>
                   <input
-                    type="number"
-                    className={`${styles.input} !w-[95%] mb-1 800px:mb-0`}
+                    type="password"
+                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
                     required
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
-                    placeholder="00000-000"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
-
-              <div className="w-full 800px:flex block pb-3">
-                <div className="w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Endereço 1</label>
-                  <input
-                    type="text"
-                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-                    required
-                    value={address1}
-                    onChange={(e) => setAddress1(e.target.value)}
-                    placeholder="Rua, Av, Casa, Etc"
-                  />
-                </div>
-
-                <div className="w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">Endereço 2</label>
-                  <input
-                    type="text"
-                    className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-                    required
-                    value={address2}
-                    onChange={(e) => setAddress2(e.target.value)}
-                    placeholder="Rua, Av, Casa, Etc"
-                  />
-                </div>
-              </div>
-
               <input
-                className={`w-[95%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
+                className={`w-[250px] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
                 required
                 value="Atualizar"
                 type="submit"
@@ -417,69 +438,100 @@ const TrackOrder = () => {
 };
 
 const ChangePassword = () => {
-  const [oldPassword, setOldPassword] = useState();
-  const [newPassword, setNewPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const passwordChangeHandler = (e) => {
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const passwordChangeHandler = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.put(
+        `${server}/user/update-user-password`,
+        { oldPassword, newPassword, confirmPassword },
+        { withCredentials: true }
+      );
+      toast.success(response.data.message);
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
   };
 
   return (
     <div className="w-full px-5">
       <h1 className="block text-[25px] text-center font-[600] text-[#000000ba] pb-2">
-        Change Password
+        Alterar Senha
       </h1>
 
-      <div className="w-full">
-        <form
-          aria-required
-          onSubmit={passwordChangeHandler}
-          className="flex flex-col items-center"
+      <form
+        onSubmit={passwordChangeHandler}
+        className="flex flex-col items-center"
+      >
+        <div className="relative w-full max-w-md mt-5">
+          <label className="block pb-2">Digite sua senha antiga</label>
+          <input
+            type={showOldPassword ? "text" : "password"}
+            className="w-full px-4 py-2 border rounded mb-4"
+            required
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+          <span
+            onClick={() => setShowOldPassword(!showOldPassword)}
+            className="absolute right-4 top-10 cursor-pointer text-gray-500"
+          >
+            {showOldPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </span>
+        </div>
+
+        <div className="relative w-full max-w-md mt-5">
+          <label className="block pb-2">Digite sua nova senha</label>
+          <input
+            type={showNewPassword ? "text" : "password"}
+            className="w-full px-4 py-2 border rounded mb-4"
+            required
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <span
+            onClick={() => setShowNewPassword(!showNewPassword)}
+            className="absolute right-4 top-10 cursor-pointer text-gray-500"
+          >
+            {showNewPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </span>
+        </div>
+
+        <div className="relative w-full max-w-md mt-5">
+          <label className="block pb-2">Digite sua senha de confirmação</label>
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            className="w-full px-4 py-2 border rounded mb-4"
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <span
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-4 top-10 cursor-pointer text-gray-500"
+          >
+            {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </span>
+        </div>
+
+        <button
+          type="submit"
+          className={`w-[70%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
         >
-          <div className=" w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Digite sua senha antiga</label>
-            <input
-              type="password"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-          </div>
-
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">Digite sua nova senha</label>
-            <input
-              type="password"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </div>
-
-          <div className="w-[100%] 800px:w-[50%] mt-5">
-            <label className="block pb-2">
-              Digite sua senha de confirmação
-            </label>
-            <input
-              type="password"
-              className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
-              required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-
-            <input
-              type="submit"
-              className={`w-[95%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
-              required
-              value="Atualizar"
-            />
-          </div>
-        </form>
-      </div>
+          Atualizar
+        </button>
+      </form>
     </div>
   );
 };
