@@ -5,20 +5,33 @@ import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../redux/reducers/wishlist";
+import { toast } from "react-toastify";
+import { addToCart } from "../../redux/reducers/cart";
 
 const ProductDetails = ({ data }) => {
+  const { wishlist } = useSelector((state) => state.wishlist);
+  const { products } = useSelector((state) => state.products);
+  const { cart } = useSelector((state) => state.cart);
+
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
 
-  const { products } = useSelector((state) => state.products);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllProductsShop(data && data?.shop._id));
-  }, [dispatch]);
+    if (wishlist && wishlist.find((i) => i._id === data?._id)) {
+      setClick(true);
+    } else {
+      setClick(false);
+    }
+  }, [dispatch, wishlist]);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -32,6 +45,30 @@ const ProductDetails = ({ data }) => {
 
   const handleMessageSubmit = () => {
     navigate("/inbox?conversation=75523234dc1");
+  };
+
+  const addToWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(addToWishlist(data));
+  };
+
+  const removeFromWishlistHandler = (data) => {
+    setClick(!click);
+    dispatch(removeFromWishlist(data._id));
+  };
+
+  const addToCartHandler = (id) => {
+    const isItemExists = cart && cart.find((item) => item._id === id);
+
+    if (isItemExists) {
+      toast.error("Item já está no carrinho");
+    } else if (1 > data.stock) {
+      toast.error("Não há estoque suficiente");
+    } else {
+      const cartData = { ...data, qty: count };
+      dispatch(addToCart(cartData));
+      toast.success("Item adicionado ao carrinho");
+    }
   };
 
   return (
@@ -105,7 +142,7 @@ const ProductDetails = ({ data }) => {
                       <AiFillHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => removeFromWishlistHandler(data)}
                         color={click ? "red" : "#333"}
                         title="Remover dos favoritos"
                       />
@@ -113,7 +150,7 @@ const ProductDetails = ({ data }) => {
                       <AiOutlineHeart
                         size={30}
                         className="cursor-pointer"
-                        onClick={() => setClick(!click)}
+                        onClick={() => addToWishlistHandler(data)}
                         color={click ? "red" : "#333"}
                         title="Adicionar aos favoritos"
                       />
@@ -122,6 +159,7 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div
                   className={`${styles.button} !mt-6 !rounded !h-11 !w-[190px] flex items-center`}
+                  onClick={() => addToCartHandler(data._id)}
                 >
                   <span className="text-white flex items-center">
                     Adicionar ao carrinho{" "}
