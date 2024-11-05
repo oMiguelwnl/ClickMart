@@ -40,3 +40,33 @@ export const loadSeller = () => async (dispatch) => {
     });
   }
 };
+
+
+export const UpdateUserInformation = (name, email, phoneNumber, password) => async (dispatch) => {
+  try {
+    dispatch({ type: "UpdateUserInfoRequest" });
+
+    const { data } = await axios.put(`${server}/user/update-user-info`, ({
+      name,
+      email,
+      phoneNumber,
+      password,
+    }), {
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Credentials": true,
+      },
+    });
+
+    dispatch({
+      type: "updateUserInfoSuccess",
+      payload: data.user,
+    });
+
+  } catch (error) {
+    dispatch({
+      type: "LoadUserFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
