@@ -96,7 +96,7 @@ export const updateUserAddress =
         dispatch({
           type: "updateUserAddressSuccess",
           payload: {
-            successMessage: "User address updated succesfully!",
+            successMessage: "Endereço atualizado com sucesso",
             user: data.user,
           },
         });

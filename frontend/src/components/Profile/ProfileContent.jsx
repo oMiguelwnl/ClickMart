@@ -37,8 +37,13 @@ const ProfileContent = ({ active }) => {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch({ type: "clearErrors" });
     }
-  }, [error]);
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch({ type: "clearMessages" });
+    }
+  }, [error, successMessage]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -534,7 +539,7 @@ const ChangePassword = () => {
 
         <button
           type="submit"
-          className={`w-[70%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
+          className={`w-[45%] h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
         >
           Atualizar
         </button>
@@ -562,7 +567,7 @@ const Address = () => {
       name: "Casa",
     },
     {
-      name: "Escritório",
+      name: "Trabalho",
     },
   ];
 
