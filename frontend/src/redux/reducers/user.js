@@ -45,15 +45,15 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
     })
 
-    .addCase("DeleteUserAddressRequest", (state) => {
+    .addCase("deleteUserAddressRequest", (state) => {
       state.addressloading = true;
     })
-    .addCase("DeleteUserAddressSuccess", (state, action) => {
+    .addCase("deleteUserAddressSuccess", (state, action) => {
       state.addressloading = false;
       state.successMessage = action.payload.successMessage;
       state.user = action.payload;
     })
-    .addCase("DeleteUserAddressFailed", (state, action) => {
+    .addCase("deleteUserAddressFailed", (state, action) => {
       state.addressloading = false;
       state.error = action.payload;
     })
