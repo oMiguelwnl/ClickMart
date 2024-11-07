@@ -15,6 +15,7 @@ import {
   ShopCreate,
   SellerActivationPage,
   ShopLogin,
+  CheckoutPage,
 } from "./routes/Routes.js";
 
 import {
@@ -65,6 +66,16 @@ function App() {
           <Route path="/mais-vendidos" element={<BestSellingPage />} />
           <Route path="/eventos" element={<EventsPage />} />
           <Route path="/faq" element={<FaqPage />} />
+
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/perfil"
             element={
@@ -73,6 +84,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
           <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
 
           {/* Shop Routes */}
