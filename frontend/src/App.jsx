@@ -76,6 +76,8 @@ function App() {
             }
           />
 
+          <Route path="/payment" element={<PaymentPage />} />
+
           <Route
             path="/perfil"
             element={
