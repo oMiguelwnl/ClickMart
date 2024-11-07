@@ -1,4 +1,4 @@
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import {
   AiOutlineArrowRight,
   AiOutlineCamera,
@@ -13,9 +13,16 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { MdTrackChanges } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { loadUser, updateUserInformation } from "../../redux/actions/user";
+import {
+  deleteUserAddress,
+  loadUser,
+  updateUserAddress,
+  updateUserInformation,
+} from "../../redux/actions/user";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { Country, State } from "country-state-city";
+import { RxCross1 } from "react-icons/rx";
 
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
@@ -537,32 +544,246 @@ const ChangePassword = () => {
 };
 
 const Address = () => {
+  const [open, setOpen] = useState(false);
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [addressType, setAddressType] = useState("");
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const addressTypeData = [
+    {
+      name: "Padrão",
+    },
+    {
+      name: "Casa",
+    },
+    {
+      name: "Escritório",
+    },
+  ];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (addressType === "" || country === "" || city === "") {
+      toast.error("Preencha todos os campos!");
+    } else {
+      const cleanZipCode = parseInt(zipCode.trim(), 10);
+      if (isNaN(cleanZipCode)) {
+        toast.error("Preencha o CEP corretamente!");
+        return;
+      }
+
+      dispatch(
+        updateUserAddress(
+          country,
+          city,
+          address1,
+          address2,
+          cleanZipCode,
+          addressType
+        )
+      );
+      setOpen(false);
+      setCountry("");
+      setCity("");
+      setAddress1("");
+      setAddress2("");
+      setZipCode(null);
+      setAddressType("");
+    }
+  };
+
+  const handleDelete = (item) => {
+    const id = item._id;
+    dispatch(deleteUserAddress(id));
+  };
+
   return (
     <div className="w-full px-5">
-      <div className="flex items-center w-full justify-between">
+      {open && (
+        <div className="fixed w-full h-screen bg-[#0000004b] top-0 left-0 flex items-center justify-center">
+          <div className="w-[35%] h-[80vh] bg-white rounded shadow relative overflow-y-scroll">
+            <div className="w-full flex justify-end p-3">
+              <RxCross1
+                size={30}
+                className="cursor-pointer"
+                onClick={() => setOpen(false)}
+                aria-label="Fechar formulário de novo endereço"
+              />
+            </div>
+            <h1 className="text-center text-[25px] font-Poppins">
+              Adicionar Novo Endereço
+            </h1>
+            <div className="w-full">
+              <form aria-required onSubmit={handleSubmit} className="w-full">
+                <div className="w-full block p-4">
+                  <div className="w-full pb-2">
+                    <label className="block pb-2">País</label>
+                    <select
+                      name="country"
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      className="w-[95%] border h-[40px] rounded-[5px]"
+                    >
+                      <option value="" className="block border pb-2">
+                        Escolha seu país
+                      </option>
+                      {Country?.getAllCountries().map((item) => (
+                        <option
+                          className="block pb-2"
+                          key={item.isoCode}
+                          value={item.isoCode}
+                        >
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="w-full pb-2">
+                    <label className="block pb-2">Cidade</label>
+                    <select
+                      name="city"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      className="w-[95%] border h-[40px] rounded-[5px]"
+                    >
+                      <option value="" className="block border pb-2">
+                        Escolha sua cidade
+                      </option>
+                      {State?.getStatesOfCountry(country).map((item) => (
+                        <option
+                          className="block pb-2"
+                          key={item.isoCode}
+                          value={item.isoCode}
+                        >
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="w-full pb-2">
+                    <label className="block pb-2">Endereço 1</label>
+                    <input
+                      type="text"
+                      className={`${styles.input}`}
+                      required
+                      value={address1}
+                      onChange={(e) => setAddress1(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full pb-2">
+                    <label className="block pb-2">Endereço 2</label>
+                    <input
+                      type="text"
+                      className={`${styles.input}`}
+                      required
+                      value={address2}
+                      onChange={(e) => setAddress2(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="w-full pb-2">
+                    <label className="block pb-2">CEP</label>
+                    <input
+                      type="number"
+                      className={`${styles.input}`}
+                      required
+                      value={zipCode}
+                      onChange={(e) => setZipCode(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="w-full pb-2">
+                    <label className="block pb-2">Tipo de Endereço</label>
+                    <select
+                      name="addressType"
+                      value={addressType}
+                      onChange={(e) => setAddressType(e.target.value)}
+                      className="w-[95%] border h-[40px] rounded-[5px]"
+                    >
+                      <option value="" className="block border pb-2">
+                        Escolha o tipo de endereço
+                      </option>
+                      {addressTypeData?.map((item) => (
+                        <option
+                          className="block pb-2"
+                          key={item.name}
+                          value={item.name}
+                        >
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="w-full pb-2">
+                    <input
+                      type="submit"
+                      className={`${styles.input} mt-5 cursor-pointer`}
+                      value="Salvar"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="flex w-full items-center justify-between">
         <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
-          My Addresses
+          Meus Endereços
         </h1>
-        <div className={`${styles.button} !rounded-md`}>
-          <span className="text-[#fff]">Add New Address</span>
+        <div
+          className={`${styles.button} !rounded-md`}
+          onClick={() => setOpen(true)}
+          aria-label="Adicionar novo endereço"
+        >
+          <span className="text-[#fff]">Adicionar Novo</span>
         </div>
       </div>
       <br />
-
-      <div className="w-full bg-white h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10">
-        <div className="flex items-center">
-          <h5>Default Address</h5>
-        </div>
-        <div className="pl-8 flex items-center">
-          <h6>494 Castro Street, San Francisco, CA 94103</h6>
-        </div>
-        <div className="pl-8 flex items-center">
-          <h6>(415) 555-0100</h6>
-        </div>
-        <div className="min-w-[10%] flex items-center justify-between pl-8">
-          <AiOutlineDelete size={25} className="cursor-pointer" />
-        </div>
-      </div>
+      {user?.addresses?.length > 0 ? (
+        user.addresses.map((item, index) => (
+          <div
+            className="w-full bg-white h-min 800px:h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10 mb-5"
+            key={item._id || index}
+          >
+            <div className="flex items-center">
+              <h5 className="pl-5 font-[600]">{item.addressType}</h5>
+            </div>
+            <div className="pl-8 flex items-center">
+              <h6 className="text-[12px] 800px:text-[unset]">
+                {item.address1} {item.address2}
+              </h6>
+            </div>
+            <div className="pl-8 flex items-center">
+              <h6 className="text-[12px] 800px:text-[unset]">
+                {user.phoneNumber}
+              </h6>
+            </div>
+            <div className="min-w-[10%] flex items-center justify-between pl-8">
+              <AiOutlineDelete
+                size={25}
+                className="cursor-pointer"
+                onClick={() => handleDelete(item)}
+                aria-label="Excluir endereço"
+              />
+            </div>
+          </div>
+        ))
+      ) : (
+        <h5 className="text-center pt-8 text-[18px]">
+          Você não tem nenhum endereço salvo!
+        </h5>
+      )}
     </div>
   );
 };
