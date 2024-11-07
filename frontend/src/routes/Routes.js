@@ -11,6 +11,8 @@ import ProfilePage from "../pages/ProfilePage";
 import ShopCreate from "../pages/ShopCreatePage";
 import ShopLogin from "../pages/ShopLoginPage";
 import SellerActivationPage from "../pages/SellerActivationPage";
+import CheckoutPage from "../pages/CheckoutPage";
+
 
 export {
   LoginPage,
@@ -26,4 +28,5 @@ export {
   ShopCreate,
   ShopLogin,
   SellerActivationPage,
+  CheckoutPage
 };
