@@ -16,6 +16,7 @@ import {
   SellerActivationPage,
   ShopLogin,
   CheckoutPage,
+  PaymentPage,
 } from "./routes/Routes.js";
 
 import {
