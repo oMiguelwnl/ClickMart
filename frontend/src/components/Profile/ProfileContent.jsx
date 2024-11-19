@@ -144,8 +144,8 @@ const ProfileContent = ({ active }) => {
                   />
                 </div>
 
-                <div className="w-[100%] 800px:w-[50%]">
-                  <label className="block pb-2">CEP</label>
+                <div className=" w-[100%] 800px:w-[50%]">
+                  <label className="block pb-2">Digite sua senha</label>
                   <input
                     type="password"
                     className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
