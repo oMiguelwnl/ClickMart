@@ -100,13 +100,11 @@ const Checkout = () => {
     });
   };
 
-  const discountPercentenge = couponCodeData ? discountPrice : "";
+  const discountPercentage = couponCodeData ? discountPrice : "";
 
   const totalPrice = couponCodeData
-    ? (subTotalPrice + shipping - discountPercentenge).toFixed(2)
+    ? (subTotalPrice + shipping - discountPercentage).toFixed(2)
     : (subTotalPrice + shipping).toFixed(2);
-
-  console.log(discountPercentenge);
 
   return (
     <div className="w-full flex flex-col items-center py-8">
@@ -136,7 +134,7 @@ const Checkout = () => {
             subTotalPrice={subTotalPrice}
             couponCode={couponCode}
             setCouponCode={setCouponCode}
-            discountPercentenge={discountPercentenge}
+            discountPercentage={discountPercentage}
           />
         </div>
       </div>
@@ -175,7 +173,7 @@ const ShippingInfo = ({
             <label className="block pb-2">Nome Completo</label>
             <input
               type="text"
-              value={user && user.name}
+              defaultValue={user && user.name}
               required
               className={`${styles.input} !w-[95%]`}
             />
@@ -184,7 +182,7 @@ const ShippingInfo = ({
             <label className="block pb-2">Endereço de E-mail</label>
             <input
               type="email"
-              value={user && user.email}
+              defaultValue={user && user.email}
               required
               className={`${styles.input}`}
             />
@@ -197,7 +195,7 @@ const ShippingInfo = ({
             <input
               type="number"
               required
-              value={user && user.phoneNumber}
+              defaultValue={user && user.phoneNumber}
               className={`${styles.input} !w-[95%]`}
             />
           </div>
@@ -316,7 +314,7 @@ const CartData = ({
   subTotalPrice,
   couponCode,
   setCouponCode,
-  discountPercentenge,
+  discountPercentage,
 }) => {
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
@@ -326,16 +324,14 @@ const CartData = ({
       </div>
       <br />
       <div className="flex justify-between">
-        <h3 className="text-[16px] font-[400] text-[#000000a4]">
-          Custo de envio:
-        </h3>
+        <h3 className="text-[16px] font-[400] text-[#000000a4]">Frete:</h3>
         <h5 className="text-[18px] font-[600]">R${shipping.toFixed(2)}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Desconto:</h3>
         <h5 className="text-[18px] font-[600]">
-          - {discountPercentenge ? "R$" + discountPercentenge.toString() : null}
+          - {discountPercentage ? "R$" + discountPercentage.toString() : null}
         </h5>
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">R${totalPrice}</h5>
