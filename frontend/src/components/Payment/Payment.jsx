@@ -25,7 +25,7 @@ const Payment = () => {
   const elements = useElements();
 
   useEffect(() => {
-    const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    const orderData = JSON.parse(localStorage.getItem("ÚltimoPedido"));
     setOrderData(orderData);
   }, []);
 
@@ -34,7 +34,7 @@ const Payment = () => {
       .create({
         purchase_units: [
           {
-            description: "Girassol",
+            description: "Sunflower",
             amount: {
               currency_code: "BRL",
               value: orderData?.totalPrice,
@@ -42,7 +42,7 @@ const Payment = () => {
           },
         ],
         application_context: {
-          shipping_preference: "SEM_ENVIO",
+          shipping_preference: "NO_SHIPPING",
         },
       })
       .then((orderID) => {
@@ -134,7 +134,7 @@ const Payment = () => {
 
           await axios
             .post(`${server}/order/create-order`, order, config)
-            .then((res) => {
+            .then(() => {
               setOpen(false);
               navigate("/order/success");
               toast.success("Pedido realizado com sucesso!");
@@ -162,16 +162,14 @@ const Payment = () => {
       type: "Pagamento na Entrega",
     };
 
-    await axios
-      .post(`${server}/order/create-order`, order, config)
-      .then((res) => {
-        setOpen(false);
-        navigate("/order/success");
-        toast.success("Pedido realizado com sucesso!");
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        localStorage.setItem("latestOrder", JSON.stringify([]));
-        window.location.reload();
-      });
+    await axios.post(`${server}/order/create-order`, order, config).then(() => {
+      setOpen(false);
+      navigate("/order/success");
+      toast.success("Pedido realizado com sucesso!");
+      localStorage.setItem("cartItems", JSON.stringify([]));
+      localStorage.setItem("latestOrder", JSON.stringify([]));
+      window.location.reload();
+    });
   };
 
   return (
@@ -236,7 +234,7 @@ const PaymentInfo = ({
                     required
                     placeholder={user && user.name}
                     className={`${styles.input} !w-[95%] text-[#444]`}
-                    value={user && user.name}
+                    defaultValue={user && user.name}
                   />
                 </div>
                 <div className="w-[50%]">
@@ -357,8 +355,7 @@ const PaymentInfo = ({
                   </div>
                   <PayPalScriptProvider
                     options={{
-                      "client-id":
-                        "Aczac4Ry9_QA1t4c7TKH9UusH3RTe6onyICPoCToHG10kjlNdI-qwobbW9JAHzaRQwFMn2-k660853jn",
+                      "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
                     }}
                   >
                     <PayPalButtons
@@ -410,16 +407,17 @@ const PaymentInfo = ({
 
 const CartData = ({ orderData }) => {
   const shipping = orderData?.shipping?.toFixed(2);
+
   return (
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">${orderData?.subTotalPrice}</h5>
+        <h5 className="text-[18px] font-[600]">R${orderData?.subTotalPrice}</h5>
       </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Frete:</h3>
-        <h5 className="text-[18px] font-[600]">${shipping}</h5>
+        <h5 className="text-[18px] font-[600]">R${shipping}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
