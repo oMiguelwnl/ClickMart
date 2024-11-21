@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import axios from "axios";
+import Store from "./redux/store";
+import { loadUser, loadSeller } from "./redux/actions/user";
+import { getAllProducts } from "./redux/actions/product";
+import { getAllEvents } from "./redux/actions/event";
+
 import {
   LoginPage,
   SignUpPage,
@@ -16,8 +24,9 @@ import {
   SellerActivationPage,
   ShopLogin,
   CheckoutPage,
+  OrderSuccessPage,
   PaymentPage,
-} from "./routes/Routes.js";
+} from "./routes/Routes";
 
 import {
   ShopDashboardPage,
@@ -30,159 +39,150 @@ import {
   ShopPreviewPage,
 } from "./routes/ShopRoutes";
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Store from "./redux/store";
-import { loadSeller, loadUser } from "./redux/actions/user";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
-import { getAllProducts } from "./redux/actions/product";
-import { getAllEvents } from "./redux/actions/event";
-import axios from "axios";
 import { server } from "./server";
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [stripeApiKey, setStripeApiKey] = useState("");
+  const [stripeApikey, setStripeApiKey] = useState("");
 
-  async function getStripeApiKey() {
-    const { data } = await axios.get(`${server}/payment/stripeapikey`);
-    setStripeApiKey(data.stripeApikey);
+  const stripePromise = stripeApikey ? loadStripe(stripeApikey) : null;
+
+  async function getStripeApikey() {
+    try {
+      const { data } = await axios.get(`${server}/payment/stripeapikey`);
+      setStripeApiKey(data.stripeApikey);
+    } catch (error) {
+      console.error("Falha ao buscar a chave da API do Stripe", error);
+    }
   }
+
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
-    getStripeApiKey();
+    getStripeApikey();
   }, []);
 
   return (
     <BrowserRouter>
-      {stripeApiKey && (
-        <Elements stripe={loadStripe(stripeApiKey)}>
-          <Routes>
-            <Route
-              path="/payment"
-              element={
-                <ProtectedRoute>
-                  <PaymentPage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Elements>
-      )}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
-        <Route
-          path="/activation/:activation_token"
-          element={<ActivationPage />}
-        />
-        <Route
-          path="/seller/activation/:activation_token"
-          element={<SellerActivationPage />}
-        />
-        <Route path="/produtos" element={<ProductsPage />} />
-        <Route path="/produto/:id" element={<ProductDetailsPage />} />
-        <Route path="/mais-vendidos" element={<BestSellingPage />} />
-        <Route path="/eventos" element={<EventsPage />} />
-        <Route path="/faq" element={<FaqPage />} />
+      <Elements stripe={stripePromise || null}>
+        <Routes>
+          {/* Rotas Públicas */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/produtos" element={<ProductsPage />} />
+          <Route path="/produto/:id" element={<ProductDetailsPage />} />
+          <Route path="/mais-vendidos" element={<BestSellingPage />} />
+          <Route path="/eventos" element={<EventsPage />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/shop-create" element={<ShopCreate />} />
+          <Route path="/shop-login" element={<ShopLogin />} />
+          <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
+          <Route
+            path="/activation/:activation_token"
+            element={<ActivationPage />}
+          />
+          <Route
+            path="/seller/activation/:activation_token"
+            element={<SellerActivationPage />}
+          />
 
-        <Route
-          path="/checkout"
-          element={
-            <ProtectedRoute>
-              <CheckoutPage />
-            </ProtectedRoute>
-          }
-        />
+          {/* Rotas de Pagamento */}
+          {stripeApikey && stripePromise && (
+            <Route path="/payment" element={<PaymentPage />} />
+          )}
 
-        <Route path="/payment" element={<PaymentPage />} />
+          {/* Rotas Protegidas (Usuário) */}
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/order/success"
+            element={
+              <ProtectedRoute>
+                <OrderSuccessPage />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/perfil"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
+          {/* Rotas Protegidas (Vendedor) */}
+          <Route
+            path="/shop/:id"
+            element={
+              <SellerProtectedRoute>
+                <ShopHomePage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <SellerProtectedRoute>
+                <ShopDashboardPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-criar-produto"
+            element={
+              <SellerProtectedRoute>
+                <ShopCreateProductPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-produtos"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllProductsPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-criar-evento"
+            element={
+              <SellerProtectedRoute>
+                <ShopCreateEventsPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-eventos"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllEventsPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-cupons"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllCouponsPage />
+              </SellerProtectedRoute>
+            }
+          />
+        </Routes>
+      </Elements>
 
-        <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
-
-        {/* Shop Routes */}
-        <Route path="/shop-create" element={<ShopCreate />} />
-        <Route path="/shop-login" element={<ShopLogin />} />
-        <Route
-          path="/shop/:id"
-          element={
-            <SellerProtectedRoute>
-              <ShopHomePage />
-            </SellerProtectedRoute>
-          }
-        />
-
-        {/* Dashboard Routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <SellerProtectedRoute>
-              <ShopDashboardPage />
-            </SellerProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard-criar-produto"
-          element={
-            <SellerProtectedRoute>
-              <ShopCreateProductPage />
-            </SellerProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard-produtos"
-          element={
-            <SellerProtectedRoute>
-              <ShopAllProductsPage />
-            </SellerProtectedRoute>
-          }
-        />
-
-        {/* Events */}
-
-        <Route
-          path="/dashboard-criar-evento"
-          element={
-            <SellerProtectedRoute>
-              <ShopCreateEventsPage />
-            </SellerProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/dashboard-eventos"
-          element={
-            <SellerProtectedRoute>
-              <ShopAllEventsPage />
-            </SellerProtectedRoute>
-          }
-        />
-
-        {/* Coupons Route */}
-
-        <Route
-          path="/dashboard-cupons"
-          element={
-            <SellerProtectedRoute>
-              <ShopAllCouponsPage />
-            </SellerProtectedRoute>
-          }
-        />
-      </Routes>
+      {/* Toast Notifications */}
       <ToastContainer
         position="bottom-center"
         autoClose={5000}
