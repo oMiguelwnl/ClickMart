@@ -30,6 +30,7 @@ import {
 
 import {
   ShopDashboardPage,
+  ShopAllOrdersPage,
   ShopHomePage,
   ShopCreateProductPage,
   ShopAllProductsPage,
@@ -136,6 +137,14 @@ function App() {
             element={
               <SellerProtectedRoute>
                 <ShopDashboardPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-pedidos"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllOrdersPage />
               </SellerProtectedRoute>
             }
           />
