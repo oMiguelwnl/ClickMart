@@ -57,10 +57,8 @@ const AllProducts = () => {
       type: "number",
       sortable: false,
       renderCell: (params) => {
-        const productName = params.row.name.replace(/\s+/g, "-");
-
         return (
-          <Link to={`/produto/${productName}`}>
+          <Link to={`/produto/${params.id}`}>
             <Button>
               <AiOutlineEye size={20} />
             </Button>
@@ -90,7 +88,7 @@ const AllProducts = () => {
     name: item.name,
     price: `R$ ${item.discountPrice}`,
     Stock: item.stock,
-    sold: 10,
+    sold: item.sold_out,
   }));
 
   return (
