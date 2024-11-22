@@ -59,12 +59,9 @@ const AllEvents = () => {
       type: "number",
       sortable: false,
       renderCell: (params) => {
-        const productName = params.row.name
-          ? params.row.name.replace(/\s+/g, "-")
-          : "produto-desconhecido";
         return (
           <>
-            <Link to={`/produto/${productName}`}>
+            <Link to={`/produto/${params.id}`}>
               <Button>
                 <AiOutlineEye size={20} />
               </Button>
@@ -101,7 +98,7 @@ const AllEvents = () => {
         name: item.name,
         price: "R$ " + item.discountPrice,
         Stock: item.stock,
-        sold: 10,
+        sold: item.sold_out,
       });
     });
 
