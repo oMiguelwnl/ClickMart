@@ -8,8 +8,6 @@ import {
 } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { MdTrackChanges } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +21,9 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Country, State } from "country-state-city";
 import { RxCross1 } from "react-icons/rx";
-
+import { getAllOrdersOfUser } from "../../redux/actions/order";
+import { Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 const ProfileContent = ({ active }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
   const [name, setName] = useState(user && user.name);
@@ -205,18 +205,15 @@ const ProfileContent = ({ active }) => {
 };
 
 const AllOrders = () => {
-  const orders = [
-    {
-      _id: "62e1f1e4d0f7d1c6c0a5f3e8",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processando",
-    },
-  ];
+  const { user } = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user?._id) {
+      dispatch(getAllOrdersOfUser(user._id));
+    }
+  }, [dispatch, user]);
 
   const columns = [
     { field: "id", headerName: "ID do Pedido", minWidth: 150, flex: 0.7 },
@@ -248,36 +245,30 @@ const AllOrders = () => {
       flex: 1,
       minWidth: 150,
       headerName: "",
-      type: "number",
       sortable: false,
-      renderCell: (params) => {
-        return (
-          <Link to={`/user/order/${params.id}`}>
-            <Button>
-              <AiOutlineArrowRight size={20} />
-            </Button>
-          </Link>
-        );
-      },
+      renderCell: (params) => (
+        <Link to={`/user/order/${params.id}`}>
+          <Button>
+            <AiOutlineArrowRight size={20} />
+          </Button>
+        </Link>
+      ),
     },
   ];
 
-  const row = [];
-
-  orders &&
-    orders.forEach((item) => {
-      row.push({
+  const rows = orders
+    ? orders.map((item) => ({
         id: item._id,
-        itemsQty: item.orderItems.length,
-        total: "R$ " + item.totalPrice,
-        status: item.orderStatus,
-      });
-    });
+        itemsQty: item.cart.length,
+        total: `R$ ${item.totalPrice}`,
+        status: item.status,
+      }))
+    : [];
 
   return (
     <div className="pl-8 pt-1">
       <DataGrid
-        rows={row}
+        rows={rows}
         columns={columns}
         pageSize={10}
         disableSelectionOnClick
