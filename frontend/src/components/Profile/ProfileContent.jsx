@@ -233,6 +233,7 @@ const AllOrders = () => {
       minWidth: 130,
       flex: 0.7,
     },
+
     {
       field: "total",
       headerName: "Total",
@@ -240,19 +241,25 @@ const AllOrders = () => {
       minWidth: 130,
       flex: 0.8,
     },
+
     {
       field: " ",
       flex: 1,
       minWidth: 150,
       headerName: "",
+      type: "number",
       sortable: false,
-      renderCell: (params) => (
-        <Link to={`/user/order/${params.id}`}>
-          <Button>
-            <AiOutlineArrowRight size={20} />
-          </Button>
-        </Link>
-      ),
+      renderCell: (params) => {
+        return (
+          <>
+            <Link to={`/user/order/${params.id}`}>
+              <Button>
+                <AiOutlineArrowRight size={20} />
+              </Button>
+            </Link>
+          </>
+        );
+      },
     },
   ];
 
