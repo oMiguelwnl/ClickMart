@@ -79,4 +79,98 @@ router.get("/get-seller-all-orders/:shopId", async (req, res, next) => {
   }
 });
 
+router.put(
+  "/update-order-status/:id",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return next(new ErrorHandler("Pedido não encontrado com este ID", 400));
+      }
+      if (req.body.status === "Transferido para o parceiro de entrega") {
+        order.cart.forEach(async (o) => {
+          await updateOrder(o._id, o.qty);
+        });
+      }
+
+      order.status = req.body.status;
+
+      if (req.body.status === "Entregue") {
+        order.deliveredAt = Date.now();
+        order.paymentInfo.status = "Entregue";
+        const serviceCharge = order.totalPrice * 0.1;
+        await updateSellerInfo(order.totalPrice - serviceCharge);
+      }
+
+      await order.save({ validateBeforeSave: false });
+
+      res.status(200).json({
+        success: true,
+        order,
+      });
+
+      async function updateOrder(id, qty) {
+        const product = await Product.findById(id);
+
+        product.stock -= qty;
+        product.sold_out += qty;
+
+        await product.save({ validateBeforeSave: false });
+      }
+
+      async function updateSellerInfo(amount) {
+        const seller = await Shop.findById(req.seller.id);
+
+        seller.availableBalance = amount;
+
+        await seller.save();
+      }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+router.put(
+  "/order-refund-success/:id",
+  isSeller,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return next(new ErrorHandler("Pedido não encontrado com este ID", 400));
+      }
+
+      order.status = req.body.status;
+
+      await order.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Reembolso realizado com sucesso!",
+      });
+
+      if (req.body.status === "Reembolso Realizado") {
+        order.cart.forEach(async (o) => {
+          await updateOrder(o._id, o.qty);
+        });
+      }
+
+      async function updateOrder(id, qty) {
+        const product = await Product.findById(id);
+
+        product.stock += qty;
+        product.sold_out -= qty;
+
+        await product.save({ validateBeforeSave: false });
+      }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;
