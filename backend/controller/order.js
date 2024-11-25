@@ -173,4 +173,29 @@ router.put(
   })
 );
 
+router.put(
+  "/order-refund/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return next(new ErrorHandler("Pedido não encontrado com este ID", 400));
+      }
+
+      order.status = req.body.status;
+
+      await order.save({ validateBeforeSave: false });
+
+      res.status(200).json({
+        success: true,
+        order,
+        message: "Pedido reembolsado com sucesso!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;
