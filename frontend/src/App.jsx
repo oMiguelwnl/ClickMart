@@ -27,6 +27,7 @@ import {
   OrderSuccessPage,
   PaymentPage,
   OrderDetailsPage,
+  TrackOrderPage,
 } from "./routes/Routes";
 
 import {
@@ -113,6 +114,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <OrderDetailsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user/track/order/:id"
+            element={
+              <ProtectedRoute>
+                <TrackOrderPage />
               </ProtectedRoute>
             }
           />
