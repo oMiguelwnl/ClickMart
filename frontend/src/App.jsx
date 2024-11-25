@@ -41,6 +41,7 @@ import {
   ShopAllEventsPage,
   ShopAllCouponsPage,
   ShopPreviewPage,
+  ShopAllRefundsPage,
 } from "./routes/ShopRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -212,6 +213,14 @@ function App() {
             element={
               <SellerProtectedRoute>
                 <ShopAllCouponsPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-reembolsos"
+            element={
+              <SellerProtectedRoute>
+                <ShopAllRefundsPage />
               </SellerProtectedRoute>
             }
           />
