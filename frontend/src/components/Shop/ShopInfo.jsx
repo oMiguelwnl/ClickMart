@@ -78,7 +78,9 @@ const ShopInfo = ({ isOwner }) => {
           <div className="p-3">
             <h5 className="font-[600]">Membro Desde</h5>
             <h4 className="text-[#000000a6]">
-              {data.createdAt ? formatDate(data.createdAt) : ""}
+              {data.createdAt
+                ? new Date(data.createdAt).toLocaleDateString("pt-BR")
+                : ""}
             </h4>
           </div>
 
