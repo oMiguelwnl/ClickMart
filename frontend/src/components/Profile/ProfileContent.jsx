@@ -370,22 +370,18 @@ const AllRefoundOrders = () => {
 };
 
 const TrackOrder = () => {
-  const orders = [
-    {
-      _id: "62e1f1e4d0f7d1c6c0a5f3e8",
-      orderItems: [
-        {
-          name: "Iphone 14 pro max",
-        },
-      ],
-      totalPrice: 120,
-      orderStatus: "Processando",
-    },
-  ];
+  const { user } = useSelector((state) => state.user);
+  const { orders } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user?._id) {
+      dispatch(getAllOrdersOfUser(user._id));
+    }
+  }, [dispatch, user]);
 
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
+    { field: "id", headerName: "ID do Pedido", minWidth: 150, flex: 0.7 },
     {
       field: "status",
       headerName: "Status",
@@ -420,22 +416,31 @@ const TrackOrder = () => {
       sortable: false,
       renderCell: (params) => {
         return (
-          <Link to={`/user/order/${params.id}`}>
-            <Button>
-              <MdTrackChanges size={20} />
-            </Button>
-          </Link>
+          <>
+            <Link to={`/user/track/order/${params.id}`}>
+              <Button>
+                <MdTrackChanges size={20} />
+              </Button>
+            </Link>
+          </>
         );
       },
     },
   ];
 
-  const row = [];
+  const rows = orders
+    ? orders.map((item) => ({
+        id: item._id,
+        itemsQty: item.cart.length,
+        total: `R$ ${item.totalPrice}`,
+        status: item.status,
+      }))
+    : [];
 
   return (
     <div className="pl-8 pt-1">
       <DataGrid
-        rows={row}
+        rows={rows}
         columns={columns}
         pageSize={10}
         disableSelectionOnClick
