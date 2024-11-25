@@ -26,11 +26,13 @@ import {
   CheckoutPage,
   OrderSuccessPage,
   PaymentPage,
+  OrderDetailsPage,
 } from "./routes/Routes";
 
 import {
   ShopDashboardPage,
   ShopAllOrdersPage,
+  ShopOrderDetailsPage,
   ShopHomePage,
   ShopCreateProductPage,
   ShopAllProductsPage,
@@ -107,6 +109,14 @@ function App() {
             }
           />
           <Route
+            path="/user/order/:id"
+            element={
+              <ProtectedRoute>
+                <OrderDetailsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/checkout"
             element={
               <ProtectedRoute>
@@ -145,6 +155,14 @@ function App() {
             element={
               <SellerProtectedRoute>
                 <ShopAllOrdersPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/order/:id"
+            element={
+              <SellerProtectedRoute>
+                <ShopOrderDetailsPage />
               </SellerProtectedRoute>
             }
           />
