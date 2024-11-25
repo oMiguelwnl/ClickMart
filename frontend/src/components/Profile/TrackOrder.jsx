@@ -43,7 +43,7 @@ const TrackOrder = () => {
           <h1 className="text-[20px]">Seu pedido foi entregue!</h1>
         ) : data?.status === "Processando reembolso" ? (
           <h1 className="text-[20px]">Seu reembolso está sendo processado!</h1>
-        ) : data?.status === "Reembolso bem-sucedido" ? (
+        ) : data?.status === "Reembolso realizado" ? (
           <h1 className="text-[20px]">Seu reembolso foi bem-sucedido!</h1>
         ) : null}
       </>

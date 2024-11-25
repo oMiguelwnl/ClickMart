@@ -153,7 +153,7 @@ router.put(
         message: "Reembolso realizado com sucesso!",
       });
 
-      if (req.body.status === "Reembolso Realizado") {
+      if (req.body.status === "Reembolso realizado") {
         order.cart.forEach(async (o) => {
           await updateOrder(o._id, o.qty);
         });
