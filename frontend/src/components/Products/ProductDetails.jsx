@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineShoppingCart } from "react-icons/ai";
@@ -11,6 +11,7 @@ import {
 } from "../../redux/reducers/wishlist";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/reducers/cart";
+import Ratings from "./Ratings";
 
 const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -31,7 +32,7 @@ const ProductDetails = ({ data }) => {
     } else {
       setClick(false);
     }
-  }, [dispatch, wishlist]);
+  }, [dispatch, wishlist, data]);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -70,6 +71,21 @@ const ProductDetails = ({ data }) => {
       toast.success("Item adicionado ao carrinho");
     }
   };
+  const totalReviewsLength =
+    products &&
+    products.reduce((acc, product) => acc + product.reviews.length, 0);
+
+  const totalRatings =
+    products &&
+    products.reduce(
+      (acc, product) =>
+        acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
+      0
+    );
+
+  const avg = totalRatings / totalReviewsLength || 0;
+
+  const averageRating = avg.toFixed(2);
 
   return (
     <div className="bg-white">
@@ -181,9 +197,10 @@ const ProductDetails = ({ data }) => {
                       </h3>
                     </Link>
                     <h5 className="pb-3 text-[15px]">
-                      ({data.shop.ratings}) Avaliações
+                      ({averageRating}/5) Avaliações
                     </h5>
                   </div>
+
                   <div
                     className={`${styles.button} bg-[#6443d1] mt-4 !w-[180px] !rounded !h-11`}
                     onClick={handleMessageSubmit}
@@ -196,7 +213,12 @@ const ProductDetails = ({ data }) => {
               </div>
             </div>
           </div>
-          <ProductDetailsInfo data={data} products={products} />
+          <ProductDetailsInfo
+            data={data}
+            products={products}
+            totalReviewsLength={totalReviewsLength}
+            averageRating={averageRating}
+          />
           <br />
           <br />
         </div>
@@ -205,7 +227,12 @@ const ProductDetails = ({ data }) => {
   );
 };
 
-const ProductDetailsInfo = ({ data, products }) => {
+const ProductDetailsInfo = ({
+  data,
+  products,
+  totalReviewsLength,
+  averageRating,
+}) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
@@ -262,8 +289,27 @@ const ProductDetailsInfo = ({ data, products }) => {
       ) : null}
 
       {active === 2 ? (
-        <div className="w-full justify-center min-h-[40vh] flex items-center">
-          <p>Ainda sem avaliações!</p>
+        <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
+          {data &&
+            data.reviews.map((item, index) => (
+              <div className="w-full flex my-2" key={index}>
+                <img
+                  src={`${item.user.avatar?.url}`}
+                  className="w-[50px] h-[50px] rounded-full"
+                />
+                <div className="pl-2 ">
+                  <div className="w-full flex items-center">
+                    <h1 className="font-[500] mr-3">{item.user.name}</h1>
+                    <Ratings rating={data?.ratings} />
+                  </div>
+                  <p>{item.comment}</p>
+                </div>
+              </div>
+            ))}
+
+          <div className="w-full flex justify-center">
+            {data && data.reviews.length === 0 && <h5>Sem Avaliações!</h5>}
+          </div>
         </div>
       ) : null}
 
@@ -279,7 +325,9 @@ const ProductDetailsInfo = ({ data, products }) => {
                 />
                 <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-2 text-[15px]">(4/5) Avaliações</h5>
+                  <h5 className="pb-2 text-[15px]">
+                    ({averageRating}/5) Avaliações
+                  </h5>
                 </div>
               </div>
             </Link>
@@ -293,7 +341,9 @@ const ProductDetailsInfo = ({ data, products }) => {
                 Entrou em:{" "}
                 <span className="font-[500]">
                   {" "}
-                  {data.shop?.createdAt?.slice(0, 10)}
+                  {data.shop?.createdAt
+                    ? new Date(data.shop.createdAt).toLocaleDateString("pt-BR")
+                    : ""}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
@@ -303,7 +353,8 @@ const ProductDetailsInfo = ({ data, products }) => {
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">
-                Total de Avaliações: <span className="font-[500]">324</span>
+                Total de Avaliações:{" "}
+                <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
               <Link to={`/shop/preview/${data?.shop._id}`}>
                 <div
