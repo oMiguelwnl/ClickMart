@@ -109,10 +109,7 @@ const DashboardSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link
-          to="/dashboard-retirar-dinheiro"
-          className="w-full flex items-center"
-        >
+        <Link to="/dashboard-reembolsos" className="w-full flex items-center">
           <CiMoneyBill
             size={30}
             color={`${active === 7 ? "crimson" : "#555"}`}
@@ -122,7 +119,7 @@ const DashboardSideBar = ({ active }) => {
               active === 7 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
-            Retirar Dinheiro
+            Reembolsos
           </h5>
         </Link>
       </div>
