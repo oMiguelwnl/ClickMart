@@ -21,7 +21,7 @@ const OrderDetails = () => {
 
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+  }, [dispatch, seller._id]);
 
   const data = orders && orders.find((item) => item._id === id);
 
@@ -143,7 +143,7 @@ const OrderDetails = () => {
       <br />
       <h4 className="pt-3 text-[20px] font-[600]">Status do Pedido:</h4>
       {data?.status !== "Processando reembolso" &&
-        data?.status !== "Reembolso Realizado" && (
+        data?.status !== "Reembolso realizado" && (
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -175,15 +175,15 @@ const OrderDetails = () => {
           </select>
         )}
       {data?.status === "Processando reembolso" ||
-      data?.status === "Reembolso Realizado" ? (
+      data?.status === "Reembolso realizado" ? (
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
           className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
         >
-          {["Processando reembolso", "Reembolso Realizado"]
+          {["Processando reembolso", "Reembolso realizado"]
             .slice(
-              ["Processando reembolso", "Reembolso Realizado"].indexOf(
+              ["Processando reembolso", "Reembolso realizado"].indexOf(
                 data?.status
               )
             )

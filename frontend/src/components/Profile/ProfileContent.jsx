@@ -43,7 +43,7 @@ const ProfileContent = ({ active }) => {
       toast.success(successMessage);
       dispatch({ type: "clearMessages" });
     }
-  }, [error, successMessage]);
+  }, [error, successMessage, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
