@@ -12,7 +12,6 @@ import { BiMenuAltLeft } from "react-icons/bi";
 import DropDown from "./DropDown";
 import Navbar from "./Navbar.jsx";
 import { useSelector } from "react-redux";
-import { backend_url } from "../../server.js";
 import Cart from "../cart/Cart.jsx";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
@@ -23,6 +22,7 @@ const Header = ({ activeHeading }) => {
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { allProducts } = useSelector((state) => state.products);
+  const { isSeller } = useSelector((state) => state.seller);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [dropDown, setDropDown] = useState(false);
@@ -97,9 +97,10 @@ const Header = ({ activeHeading }) => {
           </div>
 
           <div className={`${styles.button} w-[165px]`}>
-            <Link to="/shop-create">
+            <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
               <h1 className="text-[#fff] flex items-center">
-                Torne-se Vendedor <IoIosArrowForward className="ml-1" />
+                {isSeller ? "Dashboard" : "Torne-se vendedor"}{" "}
+                <IoIosArrowForward className="ml-1" />
               </h1>
             </Link>
           </div>
