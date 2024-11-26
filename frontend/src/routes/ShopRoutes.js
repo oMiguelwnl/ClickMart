@@ -11,6 +11,7 @@ import ShopOrderDetailsPage from "../pages/Shop/ShopOrderDetailsPage";
 import ShopAllRefundsPage from "../pages/Shop/ShopAllRefundsPage";
 import ShopSettingsPage from "../pages/Shop/ShopSettingsPage";
 import ShopWithdrawMoneyPage from "../pages/Shop/ShopWithdrawMoneyPage";
+import ShopInboxPage from "../pages/Shop/ShopInboxPage";
 
 export {
   ShopDashboardPage,
@@ -26,4 +27,5 @@ export {
   ShopAllRefundsPage,
   ShopSettingsPage,
   ShopWithdrawMoneyPage,
+  ShopInboxPage,
 };
