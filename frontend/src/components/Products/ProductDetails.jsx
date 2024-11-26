@@ -12,10 +12,13 @@ import {
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/reducers/cart";
 import Ratings from "./Ratings";
+import axios from "axios";
+import { server } from "../../server";
 
 const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { products } = useSelector((state) => state.products);
+  const { user, isAuthenticated } = useSelector((state) => state.products);
   const { cart } = useSelector((state) => state.cart);
 
   const [count, setCount] = useState(1);
@@ -44,8 +47,26 @@ const ProductDetails = ({ data }) => {
     }
   };
 
-  const handleMessageSubmit = () => {
-    navigate("/inbox?conversation=75523234dc1");
+  const handleMessageSubmit = async () => {
+    if (isAuthenticated) {
+      const groupTitle = data._id + user._id;
+      const userId = user._id;
+      const sellerId = data.shop._id;
+      await axios
+        .post(`${server}/conversation/create-new-conversation`, {
+          groupTitle,
+          userId,
+          sellerId,
+        })
+        .then((res) => {
+          navigate(`/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Faça login para criar uma conversa");
+    }
   };
 
   const addToWishlistHandler = (data) => {
