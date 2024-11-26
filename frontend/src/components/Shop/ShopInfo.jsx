@@ -1,9 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import styles from "../../styles/styles";
 import axios from "axios";
 import { server } from "../../server";
-import { getAllProductsShop } from "../../redux/actions/product";
 import { useEffect, useState } from "react";
 import Loader from "../Layout/Loader";
 
@@ -24,18 +22,13 @@ const ShopInfo = ({ isOwner }) => {
         console.log(error);
         setIsLoading(false);
       });
-  }, []);
+  }, [id]);
 
   const logoutHandler = () => {
     axios.get(`${server}/shop/logout`, {
       withCredentials: true,
     });
     window.location.reload();
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
   return (
@@ -86,7 +79,7 @@ const ShopInfo = ({ isOwner }) => {
 
           {isOwner && (
             <div className="py-3 px-4">
-              <Link to="settings">
+              <Link to="/configuracoes">
                 <div
                   className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
                 >
