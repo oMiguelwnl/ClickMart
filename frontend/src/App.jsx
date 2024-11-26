@@ -44,6 +44,7 @@ import {
   ShopAllRefundsPage,
   ShopSettingsPage,
   ShopWithdrawMoneyPage,
+  ShopInboxPage,
 } from "./routes/ShopRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -239,6 +240,14 @@ function App() {
             element={
               <SellerProtectedRoute>
                 <ShopWithdrawMoneyPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-menssagens"
+            element={
+              <SellerProtectedRoute>
+                <ShopInboxPage />
               </SellerProtectedRoute>
             }
           />
