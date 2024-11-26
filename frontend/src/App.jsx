@@ -43,6 +43,7 @@ import {
   ShopPreviewPage,
   ShopAllRefundsPage,
   ShopSettingsPage,
+  ShopWithdrawMoneyPage,
 } from "./routes/ShopRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -230,6 +231,14 @@ function App() {
             element={
               <SellerProtectedRoute>
                 <ShopAllRefundsPage />
+              </SellerProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard-sacar-dinheiro"
+            element={
+              <SellerProtectedRoute>
+                <ShopWithdrawMoneyPage />
               </SellerProtectedRoute>
             }
           />
