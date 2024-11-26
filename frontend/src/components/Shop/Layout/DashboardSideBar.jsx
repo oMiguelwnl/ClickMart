@@ -4,7 +4,6 @@ import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { AiOutlineFolderAdd, AiOutlineGift } from "react-icons/ai";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { VscNewFile } from "react-icons/vsc";
-import { CiMoneyBill } from "react-icons/ci";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { HiOutlineReceiptRefund } from "react-icons/hi";
 import { CiSettings } from "react-icons/ci";
@@ -104,6 +103,25 @@ const DashboardSideBar = ({ active }) => {
             }`}
           >
             Criar Evento
+          </h5>
+        </Link>
+      </div>
+
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/dashboard-sacar-dinheiro"
+          className="w-full flex items-center"
+        >
+          <VscNewFile
+            size={30}
+            color={`${active === 6 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 6 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Sacar dinheiro
           </h5>
         </Link>
       </div>
