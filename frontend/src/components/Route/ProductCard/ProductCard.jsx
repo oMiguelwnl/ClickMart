@@ -21,7 +21,7 @@ import { addToCart } from "../../../redux/reducers/cart";
 import { toast } from "react-toastify";
 import Ratings from "../../Products/Ratings";
 
-const ProductCard = ({ data }) => {
+const ProductCard = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
 
@@ -37,7 +37,6 @@ const ProductCard = ({ data }) => {
     shop,
     sold_out,
     ratings,
-    count,
     stock,
   } = data;
 
@@ -47,7 +46,7 @@ const ProductCard = ({ data }) => {
     } else {
       setClick(false);
     }
-  }, [wishlist]);
+  }, [wishlist, data._id]);
 
   const addToWishlistHandler = (data) => {
     setClick(!click);
@@ -78,7 +77,13 @@ const ProductCard = ({ data }) => {
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <div className="flex justify-end"></div>
 
-        <Link to={`/produto/${data._id}`}>
+        <Link
+          to={`${
+            isEvent === true
+              ? `/produto/${data._id}?isEvent=true`
+              : `/produto/${data._id}`
+          }`}
+        >
           <img
             src={`${images && images[0]?.url}`}
             alt="Produto"
@@ -90,7 +95,13 @@ const ProductCard = ({ data }) => {
           <h5 className={`${styles.shop_name}`}>{shop.name}</h5>
         </Link>
 
-        <Link to={`/produto/${data._id}`}>
+        <Link
+          to={`${
+            isEvent === true
+              ? `/produto/${data._id}?isEvent=true`
+              : `/produto/${data._id}`
+          }`}
+        >
           <h4 className="pb-3 font-[500]">
             {name.length > 40 ? name.slice(0, 40) + "..." : name}
           </h4>

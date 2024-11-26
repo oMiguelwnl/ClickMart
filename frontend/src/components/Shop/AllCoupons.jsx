@@ -37,7 +37,9 @@ const AllCoupons = () => {
       })
       .catch((error) => {
         setIsLoading(false);
-        toast.error("Falha ao carregar os cupons");
+        toast.error(
+          "Falha ao carregar os cupons" + error.response.data.message
+        );
       });
   }, [dispatch, seller._id]);
 
