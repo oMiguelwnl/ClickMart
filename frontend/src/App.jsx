@@ -28,6 +28,7 @@ import {
   PaymentPage,
   OrderDetailsPage,
   TrackOrderPage,
+  UserInbox,
 } from "./routes/Routes";
 
 import {
@@ -110,6 +111,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/inbox"
+            element={
+              <ProtectedRoute>
+                <UserInbox />
               </ProtectedRoute>
             }
           />
