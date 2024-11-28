@@ -170,35 +170,41 @@ router.get(
   })
 );
 
-router.put("/update-user-info", isAuthenticated, catchAsyncErrors(async (req, res, next) => {
-  try {
-    const { name, email, phoneNumber, password } = req.body;
+router.put(
+  "/update-user-info",
+  isAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { name, email, phoneNumber, password } = req.body;
 
-    const user = await User.findById(req.user._id).select("+password");
+      const user = await User.findById(req.user._id).select("+password");
 
-    if (!user) {
-      return next(new ErrorHandler("Usuário não existe", 400));
+      if (!user) {
+        return next(new ErrorHandler("Usuário não existe", 400));
+      }
+
+      const isPasswordValid = await user.comparePassword(password);
+      if (!isPasswordValid) {
+        return next(
+          new ErrorHandler("Por favor, forneça as informações corretas", 400)
+        );
+      }
+
+      if (name) user.name = name;
+      if (email) user.email = email;
+      if (phoneNumber) user.phoneNumber = phoneNumber;
+
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Informações atualizadas com sucesso!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
-
-    const isPasswordValid = await user.comparePassword(password);
-    if (!isPasswordValid) {
-      return next(new ErrorHandler("Por favor, forneça as informações corretas", 400));
-    }
-
-    if (name) user.name = name;
-    if (email) user.email = email;
-    if (phoneNumber) user.phoneNumber = phoneNumber;
-
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Informações atualizadas com sucesso!",
-    });
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 500));
-  }
-}));
+  })
+);
 
 router.put(
   "/update-avatar",
@@ -262,7 +268,6 @@ router.put(
         success: true,
         message: "Senha atualizada com sucesso!",
       });
-
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -331,6 +336,20 @@ router.delete(
   })
 );
 
+router.get(
+  "/user-info/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
 
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 
 module.exports = router;
