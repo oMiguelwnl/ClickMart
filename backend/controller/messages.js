@@ -44,4 +44,22 @@ router.post(
   })
 );
 
+router.get(
+  "/get-all-messages/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const messages = await Messages.find({
+        conversationId: req.params.id,
+      });
+
+      res.status(201).json({
+        success: true,
+        messages,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message), 500);
+    }
+  })
+);
+
 module.exports = router;
