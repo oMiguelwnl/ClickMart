@@ -127,7 +127,7 @@ const DashboardSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-mensagens" className="w-full flex items-center">
+        <Link to="/dashboard-menssagens" className="w-full flex items-center">
           <BiMessageSquareDetail
             size={30}
             color={`${active === 8 ? "crimson" : "#555"}`}
