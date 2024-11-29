@@ -48,8 +48,11 @@ import {
   ShopInboxPage,
 } from "./routes/ShopRoutes";
 
+import { AdminDashboardPage } from "./routes/AdminRoutes";
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
+import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
 import { server } from "./server";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -258,6 +261,16 @@ function App() {
               <SellerProtectedRoute>
                 <ShopInboxPage />
               </SellerProtectedRoute>
+            }
+          />
+
+          {/* Rotas Protegidas (Vendedor) */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardPage />
+              </ProtectedAdminRoute>
             }
           />
         </Routes>
