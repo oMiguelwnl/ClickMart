@@ -8,7 +8,7 @@ const cloudinary = require("cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendShopToken = require("../utils/shopToken");
-const { isSeller } = require("../middleware/auth");
+const { isSeller, isAdmin, isAuthenticated } = require("../middleware/auth");
 
 require("dotenv").config();
 
@@ -297,6 +297,26 @@ router.delete(
       res.status(201).json({
         success: true,
         seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// Admin
+router.get(
+  "/admin-all-sellers",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const sellers = await Shop.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        sellers,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
