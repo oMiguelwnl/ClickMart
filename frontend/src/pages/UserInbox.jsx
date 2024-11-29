@@ -209,7 +209,7 @@ const UserInbox = () => {
         <>
           <Header />
           <h1 className="text-center text-[30px] py-3 font-Poppins">
-            All Messages
+            Todas as conversas
           </h1>
           {/* All messages list */}
           {conversations &&
@@ -312,7 +312,7 @@ const MessageList = ({
         <h1 className="text-[18px]">{user?.name}</h1>
         <p className="text-[16px] text-[#000c]">
           {!loading && data?.lastMessageId !== userData?._id
-            ? "You:"
+            ? "Você:"
             : userData?.name.split(" ")[0] + ": "}{" "}
           {data?.lastMessage}
         </p>
@@ -333,6 +333,32 @@ const SellerInbox = ({
   scrollRef,
   handleImageUpload,
 }) => {
+  const formatTimeAgo = (timestamp) => {
+    const now = new Date();
+    const messageTime = new Date(timestamp);
+    const diffInMs = now - messageTime;
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInMonths / 12);
+
+    if (diffInSeconds < 60) {
+      return "Agora";
+    } else if (diffInMinutes < 60) {
+      return `${diffInMinutes} min atrás`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours} h atrás`;
+    } else if (diffInDays < 30) {
+      return `${diffInDays} d atrás`;
+    } else if (diffInMonths < 12) {
+      return `${diffInMonths} mês${diffInMonths > 1 ? "es" : ""} atrás`;
+    } else {
+      return `${diffInYears} ano${diffInYears > 1 ? "s" : ""} atrás`;
+    }
+  };
+
   return (
     <div className="w-[full] min-h-full flex flex-col justify-between p-5">
       {/* message header */}
@@ -345,7 +371,7 @@ const SellerInbox = ({
           />
           <div className="pl-3">
             <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
-            <h1>{activeStatus ? "Active Now" : ""}</h1>
+            <h1>{activeStatus ? "Online" : ""}</h1>
           </div>
         </div>
         <AiOutlineArrowRight
@@ -377,6 +403,7 @@ const SellerInbox = ({
                 <img
                   src={`${item.images?.url}`}
                   className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
+                  alt=""
                 />
               )}
               {item.text !== "" && (
@@ -389,7 +416,7 @@ const SellerInbox = ({
                     <p>{item.text}</p>
                   </div>
                   <p className="text-[12px] text-[#000000d3] pt-1">
-                    {format(item.createdAt)}
+                    {formatTimeAgo(item.createdAt)}
                   </p>
                 </div>
               )}
@@ -406,7 +433,6 @@ const SellerInbox = ({
         <div className="w-[30px]">
           <input
             type="file"
-            name=""
             id="image"
             className="hidden"
             onChange={handleImageUpload}
@@ -419,7 +445,7 @@ const SellerInbox = ({
           <input
             type="text"
             required
-            placeholder="Enter your message..."
+            placeholder="Digite sua mensagem..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             className={`${styles.input}`}

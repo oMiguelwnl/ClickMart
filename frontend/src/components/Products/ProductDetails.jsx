@@ -17,17 +17,14 @@ import { server } from "../../server";
 
 const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
-  const { products } = useSelector((state) => state.products);
-  const { user, isAuthenticated } = useSelector((state) => state.products);
   const { cart } = useSelector((state) => state.cart);
-
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { products } = useSelector((state) => state.products);
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getAllProductsShop(data && data?.shop._id));
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
@@ -35,7 +32,7 @@ const ProductDetails = ({ data }) => {
     } else {
       setClick(false);
     }
-  }, [dispatch, wishlist, data]);
+  }, [data, wishlist]);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -221,9 +218,8 @@ const ProductDetails = ({ data }) => {
                       ({averageRating}/5) Avaliações
                     </h5>
                   </div>
-
                   <div
-                    className={`${styles.button} bg-[#6443d1] mt-4 !w-[180px] !rounded !h-11`}
+                    className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
                     onClick={handleMessageSubmit}
                   >
                     <span className="text-white flex items-center">
@@ -255,6 +251,7 @@ const ProductDetailsInfo = ({
   averageRating,
 }) => {
   const [active, setActive] = useState(1);
+
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
       <div className="w-full flex justify-between border-b pt-10 pb-2">
@@ -271,7 +268,6 @@ const ProductDetailsInfo = ({
             <div className={`${styles.active_indicator}`} />
           ) : null}
         </div>
-
         <div className="relative">
           <h5
             className={
@@ -285,7 +281,6 @@ const ProductDetailsInfo = ({
             <div className={`${styles.active_indicator}`} />
           ) : null}
         </div>
-
         <div className="relative">
           <h5
             className={
@@ -300,7 +295,6 @@ const ProductDetailsInfo = ({
           ) : null}
         </div>
       </div>
-
       {active === 1 ? (
         <>
           <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
@@ -316,6 +310,7 @@ const ProductDetailsInfo = ({
               <div className="w-full flex my-2" key={index}>
                 <img
                   src={`${item.user.avatar?.url}`}
+                  alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
                 <div className="pl-2 ">
@@ -334,15 +329,15 @@ const ProductDetailsInfo = ({
         </div>
       ) : null}
 
-      {active === 3 ? (
+      {active === 3 && (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-            <Link to={`/shop/preview/${data?.shop._id}`}>
+            <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
                 <img
                   src={`${data?.shop?.avatar?.url}`}
                   className="w-[50px] h-[50px] rounded-full"
-                  alt="loja"
+                  alt=""
                 />
                 <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
@@ -352,10 +347,8 @@ const ProductDetailsInfo = ({
                 </div>
               </div>
             </Link>
-
             <p className="pt-2">{data.shop.description}</p>
           </div>
-
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
@@ -387,7 +380,7 @@ const ProductDetailsInfo = ({
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };
