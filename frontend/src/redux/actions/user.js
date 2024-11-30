@@ -136,6 +136,7 @@ export const deleteUserAddress = (id) => async (dispatch) => {
   }
 };
 
+// Admin
 export const getAllUsers = () => async (dispatch) => {
   try {
     dispatch({
