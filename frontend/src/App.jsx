@@ -48,7 +48,10 @@ import {
   ShopInboxPage,
 } from "./routes/ShopRoutes";
 
-import { AdminDashboardPage } from "./routes/AdminRoutes";
+import {
+  AdminDashboardPage,
+  AdminDashboardUsersPage,
+} from "./routes/AdminRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
@@ -270,6 +273,14 @@ function App() {
             element={
               <ProtectedAdminRoute>
                 <AdminDashboardPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/usuarios"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardUsersPage />
               </ProtectedAdminRoute>
             }
           />
