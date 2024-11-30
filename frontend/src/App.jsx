@@ -52,6 +52,7 @@ import {
   AdminDashboardPage,
   AdminDashboardUsersPage,
   AdminDashboardSellersPage,
+  AdminDashboardOrders,
 } from "./routes/AdminRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -290,6 +291,14 @@ function App() {
             element={
               <ProtectedAdminRoute>
                 <AdminDashboardSellersPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/pedidos"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardOrders />
               </ProtectedAdminRoute>
             }
           />
