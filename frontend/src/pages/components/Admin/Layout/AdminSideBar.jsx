@@ -28,7 +28,7 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin-pedidos" className="w-full flex items-center">
+        <Link to="/admin/pedidos" className="w-full flex items-center">
           <FiShoppingBag
             size={30}
             color={`${active === 2 ? "crimson" : "#555"}`}
@@ -44,7 +44,7 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin-vendedores" className="w-full flex items-center">
+        <Link to="/admin/vendedores" className="w-full flex items-center">
           <GrWorkshop
             size={30}
             color={`${active === 3 ? "crimson" : "#555"}`}
@@ -60,7 +60,7 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin-usuarios" className="w-full flex items-center">
+        <Link to="/admin/usuarios" className="w-full flex items-center">
           <HiOutlineUserGroup
             size={30}
             color={`${active === 4 ? "crimson" : "#555"}`}
@@ -89,7 +89,7 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin-eventos" className="w-full flex items-center">
+        <Link to="/admin/eventos" className="w-full flex items-center">
           <MdOutlineLocalOffer
             size={30}
             color={`${active === 6 ? "crimson" : "#555"}`}
@@ -121,7 +121,7 @@ const AdminSideBar = ({ active }) => {
       </div>
 
       <div className="w-full flex items-center p-4">
-        <Link to="/admin-configuracoes" className="w-full flex items-center">
+        <Link to="/admin/configuracoes" className="w-full flex items-center">
           <AiOutlineSetting
             size={30}
             color={`${active === 8 ? "crimson" : "#555"}`}
