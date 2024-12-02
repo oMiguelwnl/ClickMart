@@ -5,6 +5,7 @@ const Event = require("../model/event");
 const ErrorHandler = require("../utils/ErrorHandler");
 const router = express.Router();
 const cloudinary = require("cloudinary");
+const { isAdmin, isAuthenticated } = require("../middleware/auth");
 
 router.post(
   "/create-event",
@@ -104,6 +105,26 @@ router.delete(
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// Admin
+router.get(
+  "/admin-all-events",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await Event.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
