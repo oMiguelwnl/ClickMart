@@ -55,6 +55,7 @@ import {
   AdminDashboardOrders,
   AdminDashboardProductsPage,
   AdminDashboardEventsPage,
+  AdminDashboardWithdrawPage,
 } from "./routes/AdminRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -317,6 +318,14 @@ function App() {
             element={
               <ProtectedAdminRoute>
                 <AdminDashboardEventsPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="admin/sacar/dinheiro"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardWithdrawPage />
               </ProtectedAdminRoute>
             }
           />
