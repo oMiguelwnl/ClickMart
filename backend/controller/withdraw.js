@@ -32,7 +32,7 @@ router.post(
         return next(new ErrorHandler(error.message, 500));
       }
 
-      const withdraw = await Withdraw.create(data);
+      const withdraw = await withdraw.create(data);
 
       const shop = await Shop.findById(req.seller._id);
 
