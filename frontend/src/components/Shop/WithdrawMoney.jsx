@@ -300,7 +300,7 @@ const WithdrawMoney = () => {
                   <h5>Não há nenhum método de saque configurado!</h5>
                 )}
                 <button
-                  className={`${styles.button} text-white !h-[42px] !rounded`}
+                  className={`${styles.button} text-white !h-[42px] !rounded  !w-[280px]`}
                   onClick={() => setPaymentMethod(true)}
                 >
                   Adicionar Novo Método de Saque
