@@ -54,6 +54,7 @@ import {
   AdminDashboardSellersPage,
   AdminDashboardOrders,
   AdminDashboardProductsPage,
+  AdminDashboardEventsPage,
 } from "./routes/AdminRoutes";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -308,6 +309,14 @@ function App() {
             element={
               <ProtectedAdminRoute>
                 <AdminDashboardProductsPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/eventos"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboardEventsPage />
               </ProtectedAdminRoute>
             }
           />
