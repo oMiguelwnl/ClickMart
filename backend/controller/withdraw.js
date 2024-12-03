@@ -32,7 +32,7 @@ router.post(
         return next(new ErrorHandler(error.message, 500));
       }
 
-      const withdraw = await withdraw.create(data);
+      const withdraw = await Withdraw.create(data);
 
       const shop = await Shop.findById(req.seller._id);
 
@@ -81,7 +81,7 @@ router.put(
       const withdraw = await Withdraw.findByIdAndUpdate(
         req.params.id,
         {
-          status: "succeed",
+          status: "concluido",
           updatedAt: Date.now(),
         },
         { new: true }
