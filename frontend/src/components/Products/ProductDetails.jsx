@@ -136,19 +136,24 @@ const ProductDetails = ({ data }) => {
                     ))}
                 </div>
               </div>
-              <div className="w-full 800px:w-[50%] pt-5">
+              <div className="w-full 800px:w-[50%] pt-5 mt-8">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
                 <p>{data.description}</p>
-                <div className="flex pt-3">
-                  <h4 className={`${styles.productDiscountPrice}`}>
-                    {data.discountPrice}$
-                  </h4>
-                  <h3 className={`${styles.price}`}>
-                    {data.originalPrice ? data.originalPrice + "$" : null}
-                  </h3>
+                <div className="flex pt-6">
+                  <h2 className={`${styles.price}`}>
+                    {data.originalPrice
+                      ? `R$ ${data.originalPrice.toFixed(2)}`
+                      : null}
+                  </h2>
+
+                  <h1 className={`${styles.productDiscountPrice} !pl-2`}>
+                    {data.discountPrice
+                      ? `R$ ${data.discountPrice.toFixed(2)}`
+                      : null}
+                  </h1>
                 </div>
 
-                <div className="flex items-center mt-12 justify-between pr-3">
+                <div className="flex items-center mt-8 justify-between pr-3">
                   <div>
                     <button
                       className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
@@ -214,7 +219,7 @@ const ProductDetails = ({ data }) => {
                     </h5>
                   </div>
                   <div
-                    className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
+                    className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11 !w-[180px]`}
                     onClick={handleMessageSubmit}
                   >
                     <span className="text-white flex items-center">
