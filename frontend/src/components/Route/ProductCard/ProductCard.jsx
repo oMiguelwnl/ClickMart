@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 import {
   AiFillHeart,
-  AiFillStar,
   AiOutlineEye,
   AiOutlineHeart,
   AiOutlineShoppingCart,
-  AiOutlineStar,
 } from "react-icons/ai";
 import ProductDetailsCard from "../ProductDetailsCard/ProductDetailsCard";
 import { useDispatch } from "react-redux";
@@ -72,6 +70,13 @@ const ProductCard = ({ data, isEvent }) => {
     }
   };
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(price);
+  };
+
   return (
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
@@ -112,15 +117,17 @@ const ProductCard = ({ data, isEvent }) => {
         </div>
 
         <div className="py-2 flex items-center justify-between">
-          <div className="flex">
-            <h5 className={`${styles.productDiscountPrice}`}>
-              {originalPrice === 0 ? originalPrice : discountPrice}$
+          <div className="flex flex-col items-start">
+            {originalPrice ? (
+              <h4 className="font-[500] text-[16px] text-[#d55b45] pl-3 mt-[-4px] line-through">
+                {formatPrice(originalPrice)}
+              </h4>
+            ) : null}
+            <h5 className="font-bold text-[18px] text-[#333] font-Roboto pl-3">
+              {formatPrice(discountPrice)}
             </h5>
-            <h4 className={`${styles.price}`}>
-              {originalPrice ? originalPrice + " R$" : null}
-            </h4>
           </div>
-          <span className="font-[400] text-[17px] text-[#68d284]">
+          <span className="font-[400] text-[17px] text-[#68d284] pl-3">
             {sold_out === 1
               ? "1 vendido"
               : sold_out === 0
