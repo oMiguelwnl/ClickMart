@@ -114,11 +114,11 @@ const DashboardSideBar = ({ active }) => {
         >
           <VscNewFile
             size={30}
-            color={`${active === 6 ? "crimson" : "#555"}`}
+            color={`${active === 7 ? "crimson" : "#555"}`}
           />
           <h5
             className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 6 ? "text-[crimson]" : "text-[#555]"
+              active === 7 ? "text-[crimson]" : "text-[#555]"
             }`}
           >
             Sacar dinheiro
