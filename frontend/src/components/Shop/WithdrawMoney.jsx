@@ -140,6 +140,7 @@ const WithdrawMoney = () => {
                     </label>
                     <input
                       type="text"
+                      name=""
                       required
                       value={bankInfo.bankName}
                       onChange={(e) =>
@@ -155,6 +156,7 @@ const WithdrawMoney = () => {
                     </label>
                     <input
                       type="text"
+                      name=""
                       value={bankInfo.bankCountry}
                       onChange={(e) =>
                         setBankInfo({
@@ -162,6 +164,7 @@ const WithdrawMoney = () => {
                           bankCountry: e.target.value,
                         })
                       }
+                      id=""
                       required
                       placeholder="Insira o país do seu banco!"
                       className={`${styles.input} mt-2`}
@@ -174,6 +177,8 @@ const WithdrawMoney = () => {
                     </label>
                     <input
                       type="text"
+                      name=""
+                      id=""
                       required
                       value={bankInfo.bankSwiftCode}
                       onChange={(e) =>
@@ -186,12 +191,15 @@ const WithdrawMoney = () => {
                       className={`${styles.input} mt-2`}
                     />
                   </div>
+
                   <div className="pt-2">
                     <label>
                       Número da Conta <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
+                      name=""
+                      id=""
                       value={bankInfo.bankAccountNumber}
                       onChange={(e) =>
                         setBankInfo({
@@ -210,6 +218,7 @@ const WithdrawMoney = () => {
                     </label>
                     <input
                       type="text"
+                      name=""
                       required
                       value={bankInfo.bankHolderName}
                       onChange={(e) =>
@@ -222,13 +231,16 @@ const WithdrawMoney = () => {
                       className={`${styles.input} mt-2`}
                     />
                   </div>
+
                   <div className="pt-2">
                     <label>
                       Endereço do Banco <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
+                      name=""
                       required
+                      id=""
                       value={bankInfo.bankAddress}
                       onChange={(e) =>
                         setBankInfo({
@@ -240,6 +252,7 @@ const WithdrawMoney = () => {
                       className={`${styles.input} mt-2`}
                     />
                   </div>
+
                   <button
                     type="submit"
                     className={`${styles.button} mb-3 text-white`}
@@ -283,28 +296,34 @@ const WithdrawMoney = () => {
                     <div className="800px:flex w-full items-center">
                       <input
                         type="number"
-                        placeholder="Valor..."
+                        placeholder="valor..."
                         value={withdrawAmount}
                         onChange={(e) => setWithdrawAmount(e.target.value)}
                         className="800px:w-[100px] w-[full] border 800px:mr-3 p-1 rounded"
                       />
                       <div
-                        className={`${styles.button} text-white !h-[42px] !rounded`}
-                        onClick={() => withdrawHandler()}
+                        className={`${styles.button} !h-[42px] text-white`}
+                        onClick={withdrawHandler}
                       >
                         Confirmar
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <h5>Não há nenhum método de saque configurado!</h5>
+                  <div>
+                    <p className="text-[18px] pt-2">
+                      Não tem nenhum pagamento registrado
+                    </p>
+                    <div className="w-full flex items-center">
+                      <div
+                        className={`${styles.button} text-[#fff] text-[18px] mt-4`}
+                        onClick={() => setPaymentMethod(true)}
+                      >
+                        Adicionar Novo Método de Saque
+                      </div>
+                    </div>
+                  </div>
                 )}
-                <button
-                  className={`${styles.button} text-white !h-[42px] !rounded  !w-[280px]`}
-                  onClick={() => setPaymentMethod(true)}
-                >
-                  Adicionar Novo Método de Saque
-                </button>
               </>
             )}
           </div>
