@@ -1,39 +1,55 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { server } from "../../server";
 
 const CountDown = ({ data }) => {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [timeLeft, setTimeLeft] = useState({});
+  const [isEventOver, setIsEventOver] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
+    if (!data) return;
+
+    setLoading(false);
+
+    const timer = setInterval(() => {
+      const newTimeLeft = calculateTimeLeft(data.Finish_Date);
+      setTimeLeft(newTimeLeft);
+
+      if (newTimeLeft === null) {
+        axios
+          .delete(`${server}/event/delete-shop-event/${data._id}`)
+          .then(() => {
+            setIsEventOver(true);
+          })
+          .catch((error) => {
+            console.error("Erro ao excluir o evento:", error);
+          });
+      }
     }, 1000);
 
-    return () => clearTimeout(timer);
-  });
+    return () => clearInterval(timer);
+  }, [data]);
 
-  function calculateTimeLeft() {
-    const difference = +new Date(data.Finish_Date) - +new Date();
-    let timeLeft = {};
+  function calculateTimeLeft(finishDate) {
+    const difference = +new Date(finishDate) - +new Date();
+    if (difference <= 0) return null;
 
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
-    }
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((difference / 1000 / 60) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
 
-    return timeLeft;
+    return { days, hours, minutes, seconds };
   }
 
+  if (loading) return <div>Carregando...</div>;
+
   const timerComponents = Object.keys(timeLeft).map((interval) => {
-    if (!timeLeft[interval]) {
-      return null;
-    }
+    if (!timeLeft[interval]) return null;
 
     return (
-      <span key={interval} className="text-[25px] text-[#475ad2]">
+      <span className="text-[25px] text-[#475ad2]" key={interval}>
         {timeLeft[interval]} {interval}{" "}
       </span>
     );
@@ -44,7 +60,7 @@ const CountDown = ({ data }) => {
       {timerComponents.length ? (
         timerComponents
       ) : (
-        <span className="text-[red] text-[25px]">Evento Encerrado</span>
+        <span className="text-[red] text-[25px]">Evento já terminou</span>
       )}
     </div>
   );
