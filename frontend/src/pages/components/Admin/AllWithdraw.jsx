@@ -90,7 +90,7 @@ const AllWithdraw = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        toast.success("Withdraw request updated successfully!");
+        toast.success("Requisição de retirada atualizada com sucesso!");
         setData(res.data.withdraws);
         setOpen(false);
       });
@@ -102,7 +102,7 @@ const AllWithdraw = () => {
     name: item.seller.name,
     amount: "R$ " + item.amount,
     status: item.status,
-    createdAt: item.createdAt.slice(0, 10),
+    createdAt: new Date(item?.createdAt).toLocaleDateString("pt-BR"),
   }));
   return (
     <div className="w-full flex items-center pt-5 justify-center">
@@ -132,7 +132,7 @@ const AllWithdraw = () => {
               className="w-[200px] h-[35px] border rounded"
             >
               <option value={withdrawStatus}>{withdrawData.status}</option>
-              <option value={withdrawStatus}>Succeed</option>
+              <option value={withdrawStatus}>Concluido</option>
             </select>
             <button
               type="submit"
