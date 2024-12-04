@@ -7,19 +7,20 @@ import { addToCart } from "../../redux/reducers/cart";
 
 const EventCard = ({ active, data }) => {
   const { cart } = useSelector((state) => state.cart);
-
   const dispatch = useDispatch();
 
-  if (!data) {
-    return null;
-  }
+  if (!data) return null;
+
+  const formatPrice = (price) =>
+    price?.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) ||
+    "";
 
   const addToCartHandler = (data) => {
     const isItemExists = cart && cart.find((item) => item._id === data._id);
 
     if (isItemExists) {
       toast.error("Item já está no carrinho");
-    } else if (1 > data.stock) {
+    } else if (data.stock < 1) {
       toast.error("Não há estoque suficiente");
     } else {
       const cartData = { ...data, qty: 1 };
@@ -45,10 +46,10 @@ const EventCard = ({ active, data }) => {
         <div className="flex py-2 justify-between">
           <div className="flex">
             <h5 className="font-[500] text-[18px] text-[#d55b45] pr-3 line-through">
-              {data.originalPrice ? `${data.originalPrice} R$` : ""}
+              {formatPrice(data.originalPrice)}
             </h5>
             <h5 className="font-bold text-[20px] text-[#333] font-Roboto">
-              {data.discountPrice ? `${data.discountPrice} R$` : ""}
+              {formatPrice(data.discountPrice)}
             </h5>
           </div>
           <span className="pr-3 font-[400] text-[17px] text-[#44a55e]">

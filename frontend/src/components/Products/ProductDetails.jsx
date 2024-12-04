@@ -134,11 +134,6 @@ const ProductDetails = ({ data }) => {
                         />
                       </div>
                     ))}
-                  <div
-                    className={`${
-                      select === 1 ? "border" : "null"
-                    } cursor-pointer`}
-                  ></div>
                 </div>
               </div>
               <div className="w-full 800px:w-[50%] pt-5">
@@ -305,7 +300,7 @@ const ProductDetailsInfo = ({
 
       {active === 2 ? (
         <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
-          {data &&
+          {data && Array.isArray(data.reviews) && data.reviews.length > 0 ? (
             data.reviews.map((item, index) => (
               <div className="w-full flex my-2" key={index}>
                 <img
@@ -313,7 +308,7 @@ const ProductDetailsInfo = ({
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
-                <div className="pl-2 ">
+                <div className="pl-2">
                   <div className="w-full flex items-center">
                     <h1 className="font-[500] mr-3">{item.user.name}</h1>
                     <Ratings rating={data?.ratings} />
@@ -321,11 +316,12 @@ const ProductDetailsInfo = ({
                   <p>{item.comment}</p>
                 </div>
               </div>
-            ))}
-
-          <div className="w-full flex justify-center">
-            {data && data.reviews.length === 0 && <h5>Sem Avaliações!</h5>}
-          </div>
+            ))
+          ) : (
+            <div className="w-full flex justify-center">
+              <h5>Sem Avaliações!</h5>
+            </div>
+          )}
         </div>
       ) : null}
 
@@ -354,7 +350,6 @@ const ProductDetailsInfo = ({
               <h5 className="font-[600]">
                 Entrou em:{" "}
                 <span className="font-[500]">
-                  {" "}
                   {data.shop?.createdAt
                     ? new Date(data.shop.createdAt).toLocaleDateString("pt-BR")
                     : ""}
