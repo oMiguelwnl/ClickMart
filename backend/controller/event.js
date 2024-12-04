@@ -13,42 +13,41 @@ router.post(
     try {
       const shopId = req.body.shopId;
       const shop = await Shop.findById(shopId);
-
       if (!shop) {
-        return next(new ErrorHandler("Loja não encontrada", 400));
-      }
-
-      let images = [];
-
-      if (typeof req.body.images === "string") {
-        images.push(req.body.images);
+        return next(new ErrorHandler("Loja não encontrada", 404));
       } else {
-        images = req.body.images;
-      }
+        let images = [];
 
-      const imagesLinks = [];
+        if (typeof req.body.images === "string") {
+          images.push(req.body.images);
+        } else {
+          images = req.body.images;
+        }
 
-      for (let i = 0; i < images.length; i++) {
-        const result = await cloudinary.v2.uploader.upload(images[i], {
-          folder: "products",
+        const imagesLinks = [];
+
+        for (let i = 0; i < images.length; i++) {
+          const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: "products",
+          });
+
+          imagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        }
+
+        const productData = req.body;
+        productData.images = imagesLinks;
+        productData.shop = shop;
+
+        const event = await Event.create(productData);
+
+        res.status(201).json({
+          success: true,
+          event,
         });
-
-        imagesLinks.push({
-          public_id: result.public_id,
-          url: result.secure_url,
-        });
       }
-
-      const productData = req.body;
-      productData.images = imagesLinks;
-      productData.shop = shop;
-
-      const event = await Event.create(productData);
-
-      res.status(201).json({
-        success: true,
-        event,
-      });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
     }
@@ -94,10 +93,12 @@ router.delete(
       }
 
       for (let i = 0; i < event.images.length; i++) {
-        await cloudinary.v2.uploader.destroy(event.images[i].public_id);
+        const result = await cloudinary.v2.uploader.destroy(
+          event.images[i].public_id
+        );
       }
 
-      await Event.findByIdAndDelete(req.params.id);
+      await event.remove();
 
       res.status(200).json({
         success: true,
