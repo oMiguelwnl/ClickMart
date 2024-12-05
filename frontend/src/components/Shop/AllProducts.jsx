@@ -6,6 +6,7 @@ import { deleteProduct, getAllProductsShop } from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
 import Button from "@mui/material/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import { toast } from "react-toastify";
 
 const AllProducts = () => {
   const { products, isLoading } = useSelector((state) => state.products);
@@ -19,6 +20,8 @@ const AllProducts = () => {
 
   const handleDelete = (id) => {
     dispatch(deleteProduct(id));
+    toast.success("Produto excluído com sucesso!");
+    window.location.reload();
   };
 
   const columns = [
