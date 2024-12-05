@@ -76,12 +76,6 @@ router.delete(
   isSeller,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const isValidId = mongoose.Types.ObjectId.isValid(req.params.id);
-
-      if (!isValidId) {
-        return next(new ErrorHandler("ID de produto inválido", 400));
-      }
-
       const product = await Product.findById(req.params.id);
 
       if (!product) {
@@ -94,7 +88,7 @@ router.delete(
 
       await Product.findByIdAndDelete(req.params.id);
 
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: "Produto deletado com sucesso!",
       });
