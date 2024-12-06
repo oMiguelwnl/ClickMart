@@ -4,10 +4,15 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+require("dotenv").config({
+  path: "config/.env",
+});
+
+const origin = process.env.ORIGIN;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: origin,
     credentials: true,
   })
 );
