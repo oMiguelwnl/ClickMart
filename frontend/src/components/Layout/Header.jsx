@@ -214,13 +214,9 @@ const Header = ({ activeHeading }) => {
               onClick={() => setOpen(true)}
             />
           </div>
-          <div>
+          <div className="h-[50px] my-[10px] flex items-center justify-between">
             <Link to="/">
-              <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
-                alt=""
-                className="mt-3 cursor-pointer"
-              />
+              <img src="../../../src/assets/logo.png" alt="Logo" />
             </Link>
           </div>
 
