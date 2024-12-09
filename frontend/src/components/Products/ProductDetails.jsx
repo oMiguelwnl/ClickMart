@@ -111,26 +111,28 @@ const ProductDetails = ({ data }) => {
         <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-5">
             <div className="block w-full 800px:flex">
-              <div className="w-full 800px:w-[50%]">
+              <div className="w-full 800px:w-[50%] flex flex-col items-center">
                 <img
                   src={`${data && data.images[select]?.url}`}
                   alt=""
-                  className="w-[80%]"
+                  className="w-[80%] mb-6 rounded-lg"
                 />
-                <div className="w-full flex">
+                <div className="w-full flex justify-center gap-4">
                   {data &&
                     data.images.map((i, index) => (
                       <div
                         key={index}
-                        className={`${
-                          select === 0 ? "border" : "null"
-                        } cursor-pointer`}
+                        className={`cursor-pointer ${
+                          select === index
+                            ? "border-2 border-transparent"
+                            : "border border-transparent"
+                        }`}
+                        onClick={() => setSelect(index)}
                       >
                         <img
                           src={`${i?.url}`}
                           alt=""
-                          className="h-[200px] overflow-hidden mr-3 mt-3"
-                          onClick={() => setSelect(index)}
+                          className="h-[80px] w-[80px] object-cover rounded-md shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
                         />
                       </div>
                     ))}
@@ -145,7 +147,6 @@ const ProductDetails = ({ data }) => {
                       ? `R$ ${data.originalPrice.toFixed(2)}`
                       : null}
                   </h2>
-
                   <h1 className={`${styles.productDiscountPrice} !pl-2`}>
                     {data.discountPrice
                       ? `R$ ${data.discountPrice.toFixed(2)}`
@@ -230,6 +231,7 @@ const ProductDetails = ({ data }) => {
               </div>
             </div>
           </div>
+
           <ProductDetailsInfo
             data={data}
             products={products}
