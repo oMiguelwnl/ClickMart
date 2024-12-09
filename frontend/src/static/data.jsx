@@ -221,7 +221,7 @@ export const categoriesData = [
     title: "Sapatos",
     subTitle: "",
     image_Url:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvBQPQMVNRd6TtDkGs2dCri0Y-rxKkFOiEWw&usqp=CAU",
+      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.irroba.com.br%2Ffilters%3Afill(fff)%3Aquality(90)%2Fbadplayc%2Fcatalog%2Fbanners%2Fderby%2Fimg-221511-copy-1.jpg&f=1&nofb=1&ipt=3bc3110e154ecfc2f57361441b8cc0d7556214b838a75ef3194c4fbac371d232&ipo=images",
   },
   {
     id: 6,

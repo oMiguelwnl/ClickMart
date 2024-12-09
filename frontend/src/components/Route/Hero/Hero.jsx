@@ -14,18 +14,17 @@ const Hero = () => {
         <h1
           className={`text-[35px] leading-[1.2] 800px:text-[60px] text-[#3d3a3a] font-[600] capitalize`}
         >
-          A Melhor Coleção para <br /> Decoração de Casa
+          A Melhor Selecção para <br /> Seu Estilo de Vida
         </h1>
         <p className="pt-5 text-[16px] font-[Poppins] font-[400] text-[#000000ba]">
-          Encontre peças exclusivas para transformar cada ambiente da sua casa.{" "}
-          <br />
-          Desde móveis elegantes até pequenos detalhes que fazem a diferença,{" "}
-          <br />
-          nossa coleção oferece tudo o que você precisa para criar um espaço
-          único e acolhedor.
+          Descubra opções únicas para adicionar um toque especial ao seu dia a
+          dia. <br />
+          De produtos modernos a acessórios inovadores, <br />
+          nossa coleção oferece tudo o que você precisa para transformar sua
+          rotina.
         </p>
         <Link to="/produtos" className="inline-block">
-          <div className={`${styles.button} mt-5`}>
+          <div className={`${styles.button} mt-5 !w-[170px]`}>
             <span className="text-[#fff] font-[Poppins] text-[18px]">
               Compre Agora
             </span>
