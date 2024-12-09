@@ -58,7 +58,10 @@ const Header = ({ activeHeading }) => {
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
-              <img src="../../../src/assets/logo.png" alt="Logo" />
+              <img
+                src="https://res.cloudinary.com/dmyz111xa/image/upload/v1733747343/avatars/ghab9y6uzt1bo385xxd2.png"
+                alt="Logo"
+              />
             </Link>
           </div>
           {/* search box */}
@@ -216,7 +219,10 @@ const Header = ({ activeHeading }) => {
           </div>
           <div className="h-[50px] my-[10px] flex items-center justify-between">
             <Link to="/">
-              <img src="../../../src/assets/logo.png" alt="Logo" />
+              <img
+                src="https://res.cloudinary.com/dmyz111xa/image/upload/v1733747343/avatars/ghab9y6uzt1bo385xxd2.png"
+                alt="Logo"
+              />
             </Link>
           </div>
 

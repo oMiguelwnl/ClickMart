@@ -11,7 +11,10 @@ const DashboardHeader = () => {
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
         <Link to="/">
-          <img src="../../../src/assets/logo.png" alt="Logo" />
+          <img
+            src="https://res.cloudinary.com/dmyz111xa/image/upload/v1733747343/avatars/ghab9y6uzt1bo385xxd2.png"
+            alt="Logo"
+          />
         </Link>
       </div>
 
