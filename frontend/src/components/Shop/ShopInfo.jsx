@@ -50,7 +50,8 @@ const ShopInfo = ({ isOwner }) => {
       0
     );
 
-  const averageRating = totalRatings / totalReviewsLength || 0;
+  const averageRating =
+    Math.round((totalRatings / totalReviewsLength) * 10) / 10 || 0;
 
   return (
     <>
