@@ -14,7 +14,7 @@ const Hero = () => {
         <h1
           className={`text-[35px] leading-[1.2] 800px:text-[60px] text-[#3d3a3a] font-[600] capitalize`}
         >
-          A Melhor Seleção para <br /> Seu Estilo de Vida
+          Os Melhores Produtos <br /> Para Seu Estilo de Vida
         </h1>
         <p className="pt-5 text-[16px] font-[Poppins] font-[400] text-[#000000ba]">
           Descubra opções únicas para adicionar um toque especial ao seu dia a
