@@ -111,12 +111,14 @@ const ProductDetails = ({ data }) => {
         <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-5">
             <div className="block w-full 800px:flex">
-              <div className="w-full 800px:w-[50%] flex flex-col items-center">
-                <img
-                  src={`${data && data.images[select]?.url}`}
-                  alt=""
-                  className="w-[80%] mb-6 rounded-lg"
-                />
+              <div className="w-full 800px:w-[50%]  flex flex-col items-center">
+                <div className=" w-[80%] h-[450px] mb-6 rounded-lg overflow-hidden">
+                  <img
+                    src={`${data && data.images[select]?.url}`}
+                    alt=""
+                    className="w-full h-full object-contain"
+                  />
+                </div>
                 <div className="w-full flex justify-center gap-4">
                   {data &&
                     data.images.map((i, index) => (
@@ -153,7 +155,6 @@ const ProductDetails = ({ data }) => {
                       : null}
                   </h1>
                 </div>
-
                 <div className="flex items-center mt-8 justify-between pr-3">
                   <div>
                     <button
@@ -201,37 +202,39 @@ const ProductDetails = ({ data }) => {
                     <AiOutlineShoppingCart className="ml-1" />
                   </span>
                 </div>
-                <div className="flex items-center pt-8">
+                <div className="flex items-center pt-6 gap-3">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
                       src={`${data?.shop?.avatar?.url}`}
                       alt=""
-                      className="w-[50px] h-[50px] rounded-full mr-2"
+                      className="w-[50px] h-[50px] rounded-full"
                     />
                   </Link>
-                  <div className="pr-8">
+                  <div className="flex-1">
                     <Link to={`/shop/preview/${data?.shop._id}`}>
-                      <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                      <h3
+                        className={`${styles.shop_name} text-[16px] font-semibold`}
+                      >
                         {data.shop.name}
                       </h3>
                     </Link>
-                    <h5 className="pb-3 text-[15px]">
+                    <h5 className="text-[15px] text-gray-600">
                       ({averageRating}/5) Avaliações
                     </h5>
                   </div>
                   <div
-                    className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11 !w-[180px]`}
+                    className={`${styles.button} bg-[#6443d1] !rounded !h-9 !w-[150px] flex items-center justify-center`}
                     onClick={handleMessageSubmit}
                   >
-                    <span className="text-white flex items-center">
-                      Enviar Mensagem <AiOutlineMessage className="ml-1" />
+                    <span className="text-white text-sm flex items-center">
+                      Enviar Mensagem{" "}
+                      <AiOutlineMessage className="ml-1 800px:inline hidden" />
                     </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
           <ProductDetailsInfo
             data={data}
             products={products}
@@ -256,7 +259,7 @@ const ProductDetailsInfo = ({
 
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
-      <div className="w-full flex justify-between border-b pt-10 pb-2">
+      <div className="w-full flex justify-between border-b pt-10 pb-2 space-x-2 sm:space-x-4">
         <div className="relative">
           <h5
             className={
