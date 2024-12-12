@@ -297,13 +297,16 @@ const Header = ({ activeHeading }) => {
               </div>
 
               <Navbar active={activeHeading} />
+
               <div className={`${styles.button} w-[170px] rounded-[4px] ml-4`}>
-                <Link to="/shop-create">
+                <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
                   <h1 className="text-[#fff] flex items-center">
-                    Torne-se Vendedor <IoIosArrowForward className="ml-1" />
+                    {isSeller ? "Dashboard" : "Torne-se vendedor"}{" "}
+                    <IoIosArrowForward className="ml-1" />
                   </h1>
                 </Link>
               </div>
+
               <br />
               <br />
 
