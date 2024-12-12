@@ -56,19 +56,26 @@ const ShopProfileData = ({ isOwner }) => {
             </h5>
           </div>
         </div>
-
-        <div>
-          {isOwner && (
-            <div>
-              <Link to="/dashboard">
-                <div className={`${styles.button} !rounded-[4px] h-[42px]`}>
-                  <span className="text-[#fff]">Dashboard</span>
-                </div>
-              </Link>
-            </div>
-          )}
-        </div>
+        {isOwner && (
+          <div className="hidden md:flex ">
+            <Link to="/dashboard">
+              <div className={`${styles.button}  !rounded-[4px] h-[42px]`}>
+                <span className="text-[#fff]">Dashboard</span>
+              </div>
+            </Link>
+          </div>
+        )}
       </div>
+
+      {isOwner && (
+        <div className="flex md:hidden justify-center mt-6">
+          <Link to="/dashboard">
+            <div className={`${styles.button} !rounded-[4px] h-[42px]`}>
+              <span className="text-[#fff]">Dashboard</span>
+            </div>
+          </Link>
+        </div>
+      )}
 
       <br />
       {active === 1 && (
