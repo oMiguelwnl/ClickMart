@@ -69,4 +69,16 @@ const CheckoutSteps = ({ active }) => {
   );
 };
 
+const PaymentButton = ({ paymentSubmit }) => {
+  return (
+    <div
+      className={`${styles.button} w-[200px] sm:w-[250px] md:w-[280px] lg:w-[150px] bg-black h-[50px] my-3 flex items-center justify-center rounded-xl cursor-pointer`}
+      onClick={paymentSubmit}
+    >
+      <h5 className="text-white">Ir para o pagamento</h5>
+    </div>
+  );
+};
+
 export default CheckoutSteps;
+export { PaymentButton };
