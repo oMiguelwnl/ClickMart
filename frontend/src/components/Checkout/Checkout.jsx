@@ -139,7 +139,7 @@ const Checkout = () => {
         </div>
       </div>
       <div
-        className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
+        className={`${styles.button} w-[200px] sm:w-[250px] md:w-[280px] lg:w-[280px] mt-10`}
         onClick={paymentSubmit}
       >
         <h5 className="text-white">Ir para o pagamento</h5>
