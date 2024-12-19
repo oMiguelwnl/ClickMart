@@ -8,21 +8,7 @@
 
 ## 📹 Vídeo do Projeto
 
-<div align="center" style="position: relative; display: inline-block;">
-  <!-- Imagem da capa -->
-  <a href="https://res.cloudinary.com/dmyz111xa/video/upload/v1734534731/t1ufopkam2zy6pufow3r.mp4" target="_blank">
-    <img src="https://res.cloudinary.com/dmyz111xa/image/upload/v1734536358/capa_t90uej.png" 
-         alt="Clique para assistir ao vídeo" 
-         style="width:640px;max-width:100%; border:1px solid #ccc; border-radius:8px;">
-    <!-- Botão de play sobre a capa -->
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-      <button style="background-color: rgba(0, 0, 0, 0.5); border: none; padding: 15px 30px; border-radius: 50%; color: white; font-size: 20px; cursor: pointer;">
-        ▶️
-      </button>
-    </div>
-  </a>
-
-</div>
+[![Vídeo do Projeto](https://img.youtube.com/vi/86aa513f-f2fc-4299-b116-d7f78ddd01a6/0.jpg)](https://github.com/user-attachments/assets/4223d43c-c10b-46d8-8a84-4a53c16357dd)
 
 ## 🔨 Funcionalidades Principais
 
